@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="1.7" status="GENERATED" xs="false" id="_15446264309511" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity xre="false" sm="false" abs="false" class="Student" visibile="true" minimized="false" rootElement="_15446264309511" id="_15446264309582">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="String" visibile="true" name="name" id="_15446264309638">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="STUDENT" length="255"/>
+            </jpa:basic>
+            <jpa:many-to-many own="true" connected-entity-id="_15446264309604" connected-attribute-id="_154462643096314" visibile="true" name="educationCollection" id="_15446264309639"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_15446264309627">
+                <jpa:column name="ID" unique="false" nullable="false" insertable="true" updatable="true" table="STUDENT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="STUDENT"/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abs="false" class="Sequence" visibile="true" minimized="false" rootElement="_15446264309511" id="_15446264309603">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="java.math.BigInteger" visibile="true" name="seqCount" id="_154462643096311">
+                <jpa:column name="SEQ_COUNT" unique="false" nullable="true" insertable="true" updatable="true" table="SEQUENCE"/>
+            </jpa:basic>
+            <jpa:id attribute-type="String" visibile="true" name="seqName" id="_154462643096310">
+                <jpa:column name="SEQ_NAME" unique="false" nullable="false" insertable="true" updatable="true" table="SEQUENCE" length="50"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="SEQUENCE"/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abs="false" class="Education" visibile="true" minimized="false" rootElement="_15446264309511" id="_15446264309604">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="String" visibile="true" name="name" id="_154462643096313">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="EDUCATION" length="255"/>
+            </jpa:basic>
+            <jpa:many-to-many connected-entity-id="_15446264309582" connected-attribute-id="_15446264309639" visibile="true" name="studentCollection" id="_154462643096314">
+                <jpa:join-table name="EDUCATION_STUDENT">
+                    <jpa:join-column name="EDUCATION_ID" rc="ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="STUDENTS_ID" rc="ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+            </jpa:many-to-many>
+            <jpa:many-to-many own="true" connected-entity-id="_15446264309605" connected-attribute-id="_154462643096318" visibile="true" name="courseCollection" id="_154462643096315">
+                <jpa:join-table name="EDUCATION_COURSE">
+                    <jpa:join-column name="EDUCATION_ID" rc="ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="COURSES_ID" rc="ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_154462643096312">
+                <jpa:column name="ID" unique="false" nullable="false" insertable="true" updatable="true" table="EDUCATION"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="EDUCATION"/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abs="false" class="Course" visibile="true" minimized="false" rootElement="_15446264309511" id="_15446264309605">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="String" visibile="true" name="name" id="_154462643096317">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="COURSE" length="255"/>
+            </jpa:basic>
+            <jpa:many-to-one connected-entity-id="_15446264309606" connected-attribute-id="_154462643096422" visibile="true" name="supervisorId" id="_154462643096319">
+                <jpa:join-column name="SUPERVISOR_ID" rc="ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-many own="false" connected-entity-id="_15446264309604" connected-attribute-id="_154462643096315" visibile="true" name="educationCollection" id="_154462643096318"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_154462643096316">
+                <jpa:column name="ID" unique="false" nullable="false" insertable="true" updatable="true" table="COURSE"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="COURSE"/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abs="false" class="Teacher" visibile="true" minimized="false" rootElement="_15446264309511" id="_15446264309606">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="String" visibile="true" name="name" id="_154462643096421">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="TEACHER" length="255"/>
+            </jpa:basic>
+            <jpa:one-to-many own="false" connected-entity-id="_15446264309605" connected-attribute-id="_154462643096319" visibile="true" name="courseCollection" id="_154462643096422"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_154462643096420">
+                <jpa:column name="ID" unique="false" nullable="false" insertable="true" updatable="true" table="TEACHER"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TEACHER"/>
+    </jpa:entity>
+    <jpa:diagram>
+        <plane elementRef="_15446264309511"/>
+    </jpa:diagram>
+</jpa:entity-mappings>
