@@ -20,7 +20,6 @@ import javax.persistence.Persistence;
  */
 public class Demo {
     
-    
     public static void main(String[] args) {
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
@@ -28,14 +27,27 @@ public class Demo {
         
         em.getTransaction().begin();
         
-        //Student newStudent = new Student("Nisse");
-        //Education newEducation = new Education("Fullstack");
+        Student newStudent = new Student("Nisse");
+        Education newEducation = new Education("Fullstack");
+        Education secondEducation = new Education("Testare");
         
-        Teacher newTeacher = new Teacher("Pythagoras");
-        Course myCourse = new Course("Databaser");
+        Course newCourse = new Course("Java EE");
+        Course secondCourse = new Course("Debugging");
         
-        em.persist(newTeacher);
-        em.persist(myCourse);
+        secondEducation.addCourse(secondCourse);
+        secondEducation.addCourse(newCourse);
+        newEducation.addCourse(newCourse);
+        newEducation.addStudent(newStudent);
+        
+        em.persist(newStudent);
+        em.persist(newEducation);
+        em.persist(newCourse);
+        em.persist(secondCourse);
+        
+//        Teacher newTeacher = new Teacher("Pythagoras");
+//        
+//        em.persist(newTeacher);
+//        em.persist(myCourse);
         
         em.getTransaction().commit();
        
