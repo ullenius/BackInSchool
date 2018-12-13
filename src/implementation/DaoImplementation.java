@@ -3,6 +3,7 @@
 */
 package implementation;
 
+import database.Course;
 import database.Education;
 import database.Person;
 import database.Student;
@@ -20,7 +21,6 @@ public class DaoImplementation {
     
     private static final EntityManagerFactory emf;
     private static EntityManager em;
-    
     
     static {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
@@ -40,6 +40,15 @@ public class DaoImplementation {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
+        
+        // BEHÖVER KOD SOM ÄNDRAR ALLA ENTRIES
+        // I COURSE DÄR SUPER_VISOR ID = id (teacher id i paramtern)
+        // till NULL
+        
+        // FOREIGN KEY, teacher.id = course.supervisor_id
+        Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
+        supervisorCleanup.setParameter("target", id);
+        supervisorCleanup.executeUpdate();
         
         Query myQuery = em.createNativeQuery("DELETE FROM TEACHER WHERE ID = ?target;");
         myQuery.setParameter("target", id);
@@ -88,7 +97,6 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    
      public void deleteEducation(int id) {
         
         em = emf.createEntityManager();
@@ -102,6 +110,38 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
 
+     public void addCourse(Course newCourse) {
+         
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        em.persist(newCourse);
+        
+        em.getTransaction().commit();
+     }
+     
+     public void deleteCourse(int id) {
+         
+         // kommer detta att fucka sig?
+         
+         em = emf.createEntityManager();
+         em.getTransaction().begin();
+         
+         
+         // Cleans up the @ManyToMany relationship with Courses in Education
+         Query cleanUpEducationCourseLinkedTable = em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE courseGroup_ID = ?target;");
+         cleanUpEducationCourseLinkedTable.setParameter("target", id);
+         cleanUpEducationCourseLinkedTable.executeUpdate();
+         
+         Query myQuery = em.createNativeQuery("DELETE FROM COURSE WHERE ID = ?target;");
+         myQuery.setParameter("target", id);
+         
+         myQuery.executeUpdate();
+         
+         em.getTransaction().commit();
+         
+         
+     }
     
     /**
      *
