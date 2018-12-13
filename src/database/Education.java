@@ -20,14 +20,14 @@ public class Education {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String name;
    
    @OneToMany
-   private Set<Student> students;
+   private Set<Student> studentGroup;
    
    @ManyToMany
-   private Set<Course> courses;
+   private Set<Course> courseGroup;
    
    
    public Education() {
@@ -35,24 +35,24 @@ public class Education {
    
    public Education(String name) {
        this.name = name;
-       this.students = new HashSet<>();
-       this.courses = new HashSet<>();
+       this.studentGroup = new HashSet<>();
+       this.courseGroup = new HashSet<>();
    }
    
    public void addStudent(Student studentToAdd) {
-       students.add(studentToAdd);
+       studentGroup.add(studentToAdd);
    }
    
-   public Set<Student> getStudents() {
-       return Collections.unmodifiableSet(students);
+   public Set<Student> getGroupOfStudents() {
+       return Collections.unmodifiableSet(studentGroup);
    }
    
    public void addCourse(Course courseToAdd) {
-       courses.add(courseToAdd);
+       courseGroup.add(courseToAdd);
    }
    
-   public Set<Course> getCourses() {
-       return Collections.unmodifiableSet(courses);
+   public Set<Course> getCourseGroup() {
+       return Collections.unmodifiableSet(courseGroup);
    }
     
 }

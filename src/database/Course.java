@@ -21,8 +21,8 @@ import javax.persistence.ManyToOne;
 public class Course {
     
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private int id;
     private String name;
     
     @ManyToOne
@@ -49,8 +49,8 @@ public class Course {
         supervisor = newSupervisor;
     }
     
-    public Teacher getSupervisor() {
-        return supervisor;
+    public String getSupervisorName() {
+        return supervisor.getName();
 }
     
 }

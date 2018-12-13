@@ -11,11 +11,11 @@ import javax.persistence.Id;
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
 @Entity
-public class Student {
+public class Student implements Person {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String name;
     
     public Student() {
@@ -23,6 +23,14 @@ public class Student {
     
     public Student(String name) {
         this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String toString() {
+        return name + " (" +id +")";
     }
     
 }
