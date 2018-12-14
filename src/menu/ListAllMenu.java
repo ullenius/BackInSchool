@@ -34,10 +34,10 @@ public final class ListAllMenu {
         COURSE = "Display all courses";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = new DaoImplementation();
+        schoolDB = DaoImplementation.getInstance();
     }
     
-    private ListAllMenu() { //private constructor
+    private ListAllMenu() { // exists only to defeat instantiation
     }
     
     public void printMenu() {

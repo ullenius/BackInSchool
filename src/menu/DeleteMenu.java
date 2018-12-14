@@ -29,7 +29,7 @@ public final class DeleteMenu {
         COURSE = "Delete course";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = new DaoImplementation();
+        schoolDB = DaoImplementation.getInstance();
     }
     
     private DeleteMenu() { //private constructor

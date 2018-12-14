@@ -39,7 +39,7 @@ public final class AddMenu {
         COURSE = "Add course";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = new DaoImplementation();
+        schoolDB = DaoImplementation.getInstance();
     }
     
     public void printMenu() {

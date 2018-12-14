@@ -32,7 +32,7 @@ public final class SearchMenu {
         COURSE = "Search for course";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = new DaoImplementation();
+        schoolDB = DaoImplementation.getInstance();
     }
     
     private SearchMenu() { // private constructor

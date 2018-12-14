@@ -21,6 +21,7 @@ import javax.persistence.Query;
  */
 public class DaoImplementation {
     
+    private static DaoImplementation instance = null; // singleton stuff
     private static final EntityManagerFactory emf;
     private static EntityManager em;
     
@@ -28,15 +29,28 @@ public class DaoImplementation {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
     }
     
-//    public void addTeacher(Teacher teacherToAdd) {
-//
-//        em = emf.createEntityManager();
-//        em.getTransaction().begin();
-//
-//        em.persist(teacherToAdd);
-//
-//        em.getTransaction().commit();
-//    }
+    private DaoImplementation() {
+        // Exists only to defeat instantiation
+    }
+    
+    public static DaoImplementation getInstance() {
+        if (instance == null) {
+            instance = new DaoImplementation();
+        }
+        return instance;
+    }
+    
+    @Deprecated
+    // Deprecated by addPerson method
+    public void addTeacher(Teacher teacherToAdd) {
+
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        em.persist(teacherToAdd);
+
+        em.getTransaction().commit();
+    }
     
     public void deleteTeacher(int id) {
         

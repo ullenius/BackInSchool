@@ -21,7 +21,7 @@ public class Demo {
     public static void main(String[] args) {
       
         
-        DaoImplementation schoolDB = new DaoImplementation();
+        DaoImplementation schoolDB = DaoImplementation.getInstance();
         
         schoolDB.listStudentsInCourse(4);
         

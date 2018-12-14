@@ -33,7 +33,7 @@ public final class BonusMenu {
         LONELY_TEACHERS = "List TEACHERS who do not SUPERVISE any COURSES";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = new DaoImplementation();
+        schoolDB = DaoImplementation.getInstance();
     }
     
     private BonusMenu() { //private constructor
