@@ -282,7 +282,7 @@ public class DaoImplementation {
         return (results);
     }
     
-     public List<Education> listAllEducations() {
+    public List<Education> listAllEducations() {
         final String sql = "SELECT id,name FROM EDUCATION ORDER BY name;";
         
         em = emf.createEntityManager();
@@ -294,6 +294,59 @@ public class DaoImplementation {
         em.getTransaction().commit();
         return (results);
     }
+    
+    public List<Course> listUnsupervisedCourses() {
+        
+        final String sql = "SELECT ID,NAME FROM COURSE WHERE SUPERVISOR_ID IS NULL";
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Course.class);
+        List<Course> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+    
+    public List<Student> listLonelyStudents() {
+        /**
+         * Lists all STUDENTS *WITHOUT* ties to any Education
+         */
+        final String sql = "SELECT STUDENT.ID,STUDENT.NAME " +
+                "FROM STUDENT " +
+                "LEFT OUTER JOIN EDUCATION_STUDENT " +
+                "ON STUDENT.ID = EDUCATION_STUDENT.studentgroup_id " +
+                "WHERE education_id IS NULL;";
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Student.class);
+        List<Student> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+    
+    public List<Teacher> listLonelyTeachers() {
+        /**
+         * Lists all TEACHERS who do NOT supervise any COURSE
+         * that is, *WITHOUT* ties to any COURSE
+         */
+        final String sql = "SELECT TEACHER.NAME,TEACHER.ID,COURSE.SUPERVISOR_ID " +
+                "FROM TEACHER " +
+                "LEFT OUTER JOIN COURSE " +
+                "ON TEACHER.ID = COURSE.SUPERVISOR_ID " +
+                "WHERE SUPERVISOR_ID IS NULL;";
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Teacher.class);
+        List<Teacher> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+    
 }
-
+    
 
