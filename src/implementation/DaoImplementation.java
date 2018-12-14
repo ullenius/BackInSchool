@@ -28,15 +28,15 @@ public class DaoImplementation {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
     }
     
-    public void addTeacher(Teacher teacherToAdd) {
-        
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
-        
-        em.persist(teacherToAdd);
-        
-        em.getTransaction().commit();
-    }
+//    public void addTeacher(Teacher teacherToAdd) {
+//        
+//        em = emf.createEntityManager();
+//        em.getTransaction().begin();
+//        
+//        em.persist(teacherToAdd);
+//        
+//        em.getTransaction().commit();
+//    }
     
     public void deleteTeacher(int id) {
         
@@ -232,7 +232,17 @@ public class DaoImplementation {
             em.getTransaction().commit();
             return (results);
         }
+
+        public Teacher findTeacher(int id) {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
             
+            Teacher result = em.find(Teacher.class, id);
+            em.getTransaction().commit();
+            
+            return result;
+        }
+        
                                     
                                     
                                     
