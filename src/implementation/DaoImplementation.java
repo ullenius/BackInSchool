@@ -184,6 +184,30 @@ public class DaoImplementation {
 //        
 //        em.getTransaction().commit();
 //    }
+
+    public Course findCourse(int id) {
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        Course result = em.find(Course.class, id);
+
+        em.getTransaction().commit();
+        
+        return result;
+    }
+    
+    public Education findEducation(int id) {
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        Education result = em.find(Education.class, id);
+
+        em.getTransaction().commit();
+        
+        return result;
+        
+    }
     
     
 }

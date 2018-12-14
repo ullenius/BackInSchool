@@ -54,5 +54,9 @@ public class Education {
    public Set<Course> getCourseGroup() {
        return Collections.unmodifiableSet(courseGroup);
    }
+   
+   public String getName() {
+       return name;
+   }
     
 }
