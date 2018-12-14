@@ -16,8 +16,7 @@ public class MainMenu {
         statistics();
     }
     
-    
-    
+    // Demo-code solely for testing functionality
     
     public static void statistics() {
         

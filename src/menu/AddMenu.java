@@ -1,12 +1,13 @@
 /*
 *
-* This is a helper class containing the add menu
+* This is a helper class containing the ADD (CREATE) menu
 * and its implementation
 *
 */
 package menu;
 
 import database.Course;
+import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
@@ -38,13 +39,12 @@ public final class AddMenu {
         COURSE = "Add course";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-         schoolDB = new DaoImplementation();
+        schoolDB = new DaoImplementation();
     }
     
     public void printMenu() {
         
         int userChoice = -1;
-        
         
         System.out.println("Adding submenu");
         
@@ -56,34 +56,37 @@ public final class AddMenu {
         System.out.println("4. " + EDUCATION);
         System.out.println("5. " + EXIT);
         
-        userChoice = feedMe.getInt("Please make your selection:");
-        switch (userChoice) {
-            
-            case 1:
-                Person newStudent = makeStudent();
-                schoolDB.addPerson(newStudent);
-                break;
-            case 2:
-                Person newTeacher = makeTeacher();
-                schoolDB.addPerson(newTeacher);
-                break;
-            case 3:
-                Course newCourse = makeCourse();
-                schoolDB.addCourse(newCourse);
-                break;
-            case 4:
-                break;
-            case 5:
-                System.out.println("Exiting menu");
-                return; // exiting method
-            default:
-                System.out.println("Invalid selection");
-                break;
+        while (true) {
+            userChoice = feedMe.getInt("Please make your selection:");
+            switch (userChoice) {
                 
+                case 1:
+                    Person newStudent = makeStudent();
+                    schoolDB.addPerson(newStudent);
+                    break;
+                case 2:
+                    Person newTeacher = makeTeacher();
+                    schoolDB.addPerson(newTeacher);
+                    break;
+                case 3:
+                    Course newCourse = makeCourse();
+                    schoolDB.addCourse(newCourse);
+                    break;
+                case 4:
+                    Education newEducation = makeEducation();
+                    schoolDB.addEducation(newEducation);
+                    break;
+                case 5:
+                    System.out.println("Exiting menu");
+                    return; // exiting method
+                default:
+                    System.out.println("Invalid selection");
+                    break;
+            }
         }
     }
     
-    public Student makeStudent() {
+    private Student makeStudent() {
         
         System.out.println("Creating a new Student object");
         
@@ -95,9 +98,9 @@ public final class AddMenu {
         return newStudent;
     }
     
-    public Teacher makeTeacher() {
+    private Teacher makeTeacher() {
         
-         System.out.println("Creating a new TEACHER object");
+        System.out.println("Creating a new TEACHER object");
         
         String name = feedMe.getText("Enter name");
         name = name.trim();
@@ -107,7 +110,7 @@ public final class AddMenu {
         return newTeacher;
     }
     
-    public Course makeCourse() {
+    private Course makeCourse() {
         
         int supervisorID = -1;
         System.out.println("Creating a new COURSE object");
@@ -118,8 +121,19 @@ public final class AddMenu {
         
         Teacher supervisor = schoolDB.findTeacher(supervisorID);
         newCourse.setSupervisor(supervisor);
+        System.out.println("New COURSE object successfully created");
         
         return newCourse;
+    }
+    
+    private Education makeEducation() {
+
+        System.out.println("Creating a new EDUCATION object");
+        String name = feedMe.getText("Enter name");
+        name = name.trim();
+        Education newEducation = new Education(name);
+        
+        return newEducation;
     }
     
     
