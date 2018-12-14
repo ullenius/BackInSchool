@@ -8,6 +8,8 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
+import java.util.Collections;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -208,6 +210,32 @@ public class DaoImplementation {
         return result;
         
     }
+        
+        public List<Student> listStudentsInCourse(int courseID) {
+            
+            final String sql = "SELECT STUDENT.ID, STUDENT.NAME "
+                    + "FROM STUDENT,EDUCATION_COURSE,COURSE "
+                    + "WHERE COURSE.ID = EDUCATION_COURSE.courseGroup_ID "
+                    + "AND COURSE.ID = ?target "
+                    + "GROUP BY STUDENT.NAME "
+                    + "ORDER BY STUDENT.NAME DESC;";
+            
+                                    
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+            
+            Query myQuery = em.createNativeQuery(sql,Student.class);
+            myQuery.setParameter("target", courseID);
+            
+            List<Student> results = myQuery.getResultList();
+            
+            em.getTransaction().commit();
+            return (results);
+        }
+            
+                                    
+                                    
+                                    
+    }
     
     
-}
