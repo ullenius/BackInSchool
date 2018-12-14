@@ -165,27 +165,26 @@ public class DaoImplementation {
         return result;
     }
     
+    public Student findStudentById(int id) {
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Student foundStudent = em.find(Student.class, id);
+        
+        return foundStudent;
+    }
     
-//     // Deprecated by the generic-method
-//    public Student findStudentById(int id) {
-//        em = emf.createEntityManager();
-//        em.getTransaction().begin();
-//
-//        Student foundStudent = em.find(Student.class, id);
-//
-//        return foundStudent;
-//    }
-    
+    @Deprecated
     // DEPRECATED by addPerson()
-//    public void addStudent(Student studentToAdd) {
-//
-//        em = emf.createEntityManager();
-//        em.getTransaction().begin();
-//
-//        em.persist(studentToAdd);
-//
-//        em.getTransaction().commit();
-//    }
+    public void addStudent(Student studentToAdd) {
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        em.persist(studentToAdd);
+        
+        em.getTransaction().commit();
+    }
     
     public Course findCourse(int id) {
         
@@ -241,20 +240,60 @@ public class DaoImplementation {
         return result;
     }
     
-    public Student findStudentById(int id) {
+    
+    public List<Student> listAllStudents() {
+        
+        final String sql = "SELECT id,name FROM STUDENT ORDER BY NAME;";
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
         
-        Student result = em.find(Student.class, id);
-        em.getTransaction().commit();
+        Query myQuery = em.createNativeQuery(sql,Student.class);
+        List<Student> results = myQuery.getResultList();
         
-        return result;
+        em.getTransaction().commit();
+        return (results);
     }
     
+    public List<Teacher> listAllTeachers() {
+        final String sql = "SELECT id,name FROM TEACHER ORDER BY name;";
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Teacher.class);
+        List<Teacher> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
     
+    public List<Course> listAllCourses() {
+        final String sql = "SELECT id,name,supervisor_id "
+                + "FROM COURSE ORDER BY name;";
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Course.class);
+        List<Course> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
     
-    
+     public List<Education> listAllEducations() {
+        final String sql = "SELECT id,name FROM EDUCATION ORDER BY name;";
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Education.class);
+        List<Education> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
 }
 
 
