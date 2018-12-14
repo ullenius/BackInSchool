@@ -29,12 +29,12 @@ public class DaoImplementation {
     }
     
 //    public void addTeacher(Teacher teacherToAdd) {
-//        
+//
 //        em = emf.createEntityManager();
 //        em.getTransaction().begin();
-//        
+//
 //        em.persist(teacherToAdd);
-//        
+//
 //        em.getTransaction().commit();
 //    }
     
@@ -88,7 +88,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-  
+    
     public void addEducation(Education newEducation) {
         
         em = emf.createEntityManager();
@@ -99,7 +99,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-     public void deleteEducation(int id) {
+    public void deleteEducation(int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -111,39 +111,39 @@ public class DaoImplementation {
         
         em.getTransaction().commit();
     }
-
-     public void addCourse(Course newCourse) {
-         
+    
+    public void addCourse(Course newCourse) {
+        
         em = emf.createEntityManager();
         em.getTransaction().begin();
         
         em.persist(newCourse);
         
         em.getTransaction().commit();
-     }
-     
-     public void deleteCourse(int id) {
-         
-         // kommer detta att fucka sig?
-         
-         em = emf.createEntityManager();
-         em.getTransaction().begin();
-         
-         
-         // Cleans up the @ManyToMany relationship with Courses in Education
-         Query cleanUpEducationCourseLinkedTable = em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE courseGroup_ID = ?target;");
-         cleanUpEducationCourseLinkedTable.setParameter("target", id);
-         cleanUpEducationCourseLinkedTable.executeUpdate();
-         
-         Query myQuery = em.createNativeQuery("DELETE FROM COURSE WHERE ID = ?target;");
-         myQuery.setParameter("target", id);
-         
-         myQuery.executeUpdate();
-         
-         em.getTransaction().commit();
-         
-         
-     }
+    }
+    
+    public void deleteCourse(int id) {
+        
+        // kommer detta att fucka sig?
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        
+        // Cleans up the @ManyToMany relationship with Courses in Education
+        Query cleanUpEducationCourseLinkedTable = em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE courseGroup_ID = ?target;");
+        cleanUpEducationCourseLinkedTable.setParameter("target", id);
+        cleanUpEducationCourseLinkedTable.executeUpdate();
+        
+        Query myQuery = em.createNativeQuery("DELETE FROM COURSE WHERE ID = ?target;");
+        myQuery.setParameter("target", id);
+        
+        myQuery.executeUpdate();
+        
+        em.getTransaction().commit();
+        
+        
+    }
     
     /**
      *
@@ -170,30 +170,30 @@ public class DaoImplementation {
 //    public Student findStudentById(int id) {
 //        em = emf.createEntityManager();
 //        em.getTransaction().begin();
-//        
+//
 //        Student foundStudent = em.find(Student.class, id);
-//        
+//
 //        return foundStudent;
 //    }
     
-      // DEPRECATED by addPerson()
+    // DEPRECATED by addPerson()
 //    public void addStudent(Student studentToAdd) {
-//        
+//
 //        em = emf.createEntityManager();
 //        em.getTransaction().begin();
-//        
+//
 //        em.persist(studentToAdd);
-//        
+//
 //        em.getTransaction().commit();
 //    }
-
+    
     public Course findCourse(int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
-
+        
         Course result = em.find(Course.class, id);
-
+        
         em.getTransaction().commit();
         
         return result;
@@ -202,50 +202,59 @@ public class DaoImplementation {
     public Education findEducation(int id) {
         em = emf.createEntityManager();
         em.getTransaction().begin();
-
+        
         Education result = em.find(Education.class, id);
-
+        
         em.getTransaction().commit();
         
         return result;
-        
     }
+    
+    public List<Student> listStudentsInCourse(int courseID) {
         
-        public List<Student> listStudentsInCourse(int courseID) {
-            
-            final String sql = "SELECT STUDENT.ID, STUDENT.NAME "
-                    + "FROM STUDENT,EDUCATION_COURSE,COURSE "
-                    + "WHERE COURSE.ID = EDUCATION_COURSE.courseGroup_ID "
-                    + "AND COURSE.ID = ?target "
-                    + "GROUP BY STUDENT.NAME "
-                    + "ORDER BY STUDENT.NAME DESC;";
-            
-                                    
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-            
-            Query myQuery = em.createNativeQuery(sql,Student.class);
-            myQuery.setParameter("target", courseID);
-            
-            List<Student> results = myQuery.getResultList();
-            
-            em.getTransaction().commit();
-            return (results);
-        }
+        final String sql = "SELECT STUDENT.ID, STUDENT.NAME "
+                + "FROM STUDENT,EDUCATION_COURSE,COURSE "
+                + "WHERE COURSE.ID = EDUCATION_COURSE.courseGroup_ID "
+                + "AND COURSE.ID = ?target "
+                + "GROUP BY STUDENT.NAME "
+                + "ORDER BY STUDENT.NAME DESC;";
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Student.class);
+        myQuery.setParameter("target", courseID);
+        
+        List<Student> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+    
+    public Teacher findTeacher(int id) {
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Teacher result = em.find(Teacher.class, id);
+        em.getTransaction().commit();
+        
+        return result;
+    }
+    
+    public Student findStudentById(int id) {
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Student result = em.find(Student.class, id);
+        em.getTransaction().commit();
+        
+        return result;
+    }
+    
+    
+    
+    
+}
 
-        public Teacher findTeacher(int id) {
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-            
-            Teacher result = em.find(Teacher.class, id);
-            em.getTransaction().commit();
-            
-            return result;
-        }
-        
-                                    
-                                    
-                                    
-    }
-    
-    
+

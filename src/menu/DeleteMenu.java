@@ -11,7 +11,7 @@ import util.InputHelper;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class DeleteMenu {
+public final class DeleteMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;
@@ -30,6 +30,9 @@ public class DeleteMenu {
         EXIT = "Exit menu";
         feedMe = new InputHelper();
         schoolDB = new DaoImplementation();
+    }
+    
+    private DeleteMenu() { //private constructor
     }
     
     public void printMenu() {
