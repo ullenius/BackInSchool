@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Scanner;
 import util.InputHelper;
 
-
 public final class MainMenu {
     
     private static final String CREATE;
@@ -65,18 +64,23 @@ public final class MainMenu {
                 
                 case 1:
                     System.out.println(CREATE);
+                    AddMenu.printMenu();
                     break;
                 case 2:
                     System.out.println(READ);
+                    ListAllMenu.printMenu();
                     break;
                 case 3:
-                    System.out.println(UPDATE);
-                    break;
+                    System.out.println(UPDATE); // NOT YET IMPLEMENTED
+                    throw new UnsupportedOperationException("Not yet implemented");
+                    //break;
                 case 4:
                     System.out.println(DELETE);
+                    DeleteMenu.printMenu();
                     break;
                 case 5:
                     System.out.println(SEARCH);
+                    SearchMenu.printMenu();
                     break;
                 case 6:
                     System.out.println(BONUS);
@@ -122,7 +126,6 @@ public final class MainMenu {
         List<Student> results = schoolDB.listStudentsInCourse(choice);
         
         results.forEach(System.out::println);
-        
         
     }
     

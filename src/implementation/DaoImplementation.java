@@ -21,16 +21,18 @@ import javax.persistence.Query;
  */
 public class DaoImplementation {
     
-    private static DaoImplementation instance = null; // singleton stuff
+    private static DaoImplementation instance;
     private static final EntityManagerFactory emf;
     private static EntityManager em;
     
     static {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
+        instance = null; //singleton stuff. See getInstance()
     }
     
     private DaoImplementation() {
         // Exists only to defeat instantiation
+        throw new AssertionError(); // if it somehow gets called anyway
     }
     
     public static DaoImplementation getInstance() {
@@ -52,7 +54,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void deleteTeacher(int id) {
+    public void deleteTeacher(final int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -74,7 +76,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void deleteStudent(int id) {
+    public void deleteStudent(final int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -92,7 +94,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void addPerson(Person personToAdd) {
+    public void addPerson(final Person personToAdd) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -103,7 +105,7 @@ public class DaoImplementation {
     }
     
     
-    public void addEducation(Education newEducation) {
+    public void addEducation(final Education newEducation) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -113,7 +115,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void deleteEducation(int id) {
+    public void deleteEducation(final int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -126,7 +128,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void addCourse(Course newCourse) {
+    public void addCourse(final Course newCourse) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -136,7 +138,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public void deleteCourse(int id) {
+    public void deleteCourse(final int id) {
         
         // kommer detta att fucka sig?
         
@@ -169,7 +171,7 @@ public class DaoImplementation {
      * @param person
      * @return
      */
-    public <T extends Person> Person findById(int id, T person) {
+    public <T extends Person> Person findById(final int id, T person) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -179,7 +181,7 @@ public class DaoImplementation {
         return result;
     }
     
-    public Student findStudentById(int id) {
+    public Student findStudentById(final int id) {
         em = emf.createEntityManager();
         em.getTransaction().begin();
         
@@ -200,7 +202,7 @@ public class DaoImplementation {
         em.getTransaction().commit();
     }
     
-    public Course findCourse(int id) {
+    public Course findCourse(final int id) {
         
         em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -212,7 +214,7 @@ public class DaoImplementation {
         return result;
     }
     
-    public Education findEducation(int id) {
+    public Education findEducation(final int id) {
         em = emf.createEntityManager();
         em.getTransaction().begin();
         
@@ -223,7 +225,7 @@ public class DaoImplementation {
         return result;
     }
     
-    public List<Student> listStudentsInCourse(int courseID) {
+    public List<Student> listStudentsInCourse(final int courseID) {
         
         final String sql = "SELECT STUDENT.ID, STUDENT.NAME "
                 + "FROM STUDENT,EDUCATION_COURSE,COURSE "
@@ -244,7 +246,7 @@ public class DaoImplementation {
         return (results);
     }
     
-    public Teacher findTeacher(int id) {
+    public Teacher findTeacher(final int id) {
         em = emf.createEntityManager();
         em.getTransaction().begin();
         
