@@ -12,6 +12,9 @@ import database.Education;
 import database.Person;
 import database.Student;
 import implementation.DaoImplementation;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import util.InputHelper;
 
 /**
@@ -20,7 +23,8 @@ import util.InputHelper;
  */
 public final class UpdateMenu {
     
-    private UpdateMenu() { // exists only to prevent instantiation
+    private UpdateMenu() { // exists only to defeat instantiation
+        throw new AssertionError(); // this should never happen
     }
     
     private static final String STUDENT;
@@ -44,8 +48,8 @@ public final class UpdateMenu {
         COURSE = "Update course";
         
         SUPERVISOR = "Set a new supervisor";
-        EDUCATION = "Update education";
         
+        EDUCATION = "Update education";
         EDUCATION_ADD_STUDENTS = "ADD students to education";
         EDUCATION_REMOVE_STUDENTS = "DELETE students from education";
         EDUCATION_ADD_COURSES = "ADD courses to education";
@@ -80,18 +84,23 @@ public final class UpdateMenu {
                 
                 case 1:
                     System.out.println(STUDENT);
+                    updateStudentName();
                     break;
                 case 2:
                     System.out.println(TEACHER);
+                    updateTeacherName();
                     break;
                 case 3:
                     System.out.println(COURSE);
+                    updateCourseName();
                     break;
                 case 4:
                     System.out.println(SUPERVISOR);
+                    updateSupervisor();
                     break;
                 case 5:
                     System.out.println(EDUCATION);
+                    updateEducationName();
                     break;
                 case 6:
                     System.out.println(EDUCATION_ADD_STUDENTS);
@@ -114,16 +123,90 @@ public final class UpdateMenu {
             }
         }
         
+    }
+    
+    /**
+     * Updates the student name based on id
+     */
+    private static void updateStudentName() {
+        
+        int targetID = feedMe.getInt("Please enter student id");
+        String newName = feedMe.getText("Please enter new name: ");
+        System.out.println("Updating name in database for Student " + targetID);
+        schoolDB.updateStudentName(newName, targetID);
+    }
+    
+    private static void updateTeacherName() {
+        
+        int targetID = feedMe.getInt("Please enter TEACHER id");
+        String newName = feedMe.getText("Please enter new name: ");
+        System.out.println("Updating name in database for TEACHER " + targetID);
+        schoolDB.updateTeacherName(newName, targetID);
+    }
+    
+    private static void updateCourseName() {
+        
+        int targetID = feedMe.getInt("Please enter COURSE id");
+        String newName = feedMe.getText("Please enter new name: ");
+        System.out.println("Updating name in database for COURSE " + targetID);
+        schoolDB.updateCourseName(newName, targetID);
+    }
+    
+    private static void updateEducationName() {
+        int targetID = feedMe.getInt("Please enter EDUCATION id");
+        String newName = feedMe.getText("Please enter new name: ");
+        System.out.println("Updating name in database for EDUCATION " + targetID);
+        schoolDB.updateEducationName(newName, targetID);
         
     }
     
-    private static void updateStudent() {
+    private static void updateSupervisor() {
         
-        int targetID = feedMe.getInt("Please enter student id");
+        int courseID = feedMe.getInt("Please enter COURSE id:");
+        Integer supervisorID = feedMe.getInt("Please enter SUPERVISOR ID, -1 "
+                + "to set it to NULL");
+        if (supervisorID.intValue() == -1)
+            supervisorID = null;
+        schoolDB.updateSupervisor(courseID, supervisorID);
+    }
+    
+    private static void addStudentsToEducation() {
         
-        Student updatedStudent = schoolDB.findStudentById(targetID);
-        //Student src = updatedStudent;
+        int courseID = feedMe.getInt("Please enter EDUCATION id:");
+        
+        int input = 0;
+        
+        System.out.println("Please enter student ID to add to EDUCATION");
+        
+        Set<Integer> studentsToAdd = new HashSet<>();
+        
+        while (input != -1) {
+            input = feedMe.getInt("One entry per line, enter -1 to end");
+            if (input != -1)
+                studentsToAdd.add(input);
+        }
+        
+        final int EDUCATION_ID = 6;
+        
+        StringBuffer sql = new StringBuffer("INSERT INTO TABLE "
+                + "EDUCATION_STUDENT Education_ID, studentGroup_ID VALUES(");
+        Iterator myIterator = studentsToAdd.iterator();
+        
+        while (myIterator.hasNext()) {
+            sql.append("(" + EDUCATION_ID + ", "+myIterator.next()+")");
+        }
+        
+        System.out.println(sql);
+        
+        
+        
+        
+        
         
     }
+            
+//                EDUCATION_ADD_STUDENTS = "ADD students to education";
+//    EDUCATION_ADD_STUDENTS);
+    
     
 }

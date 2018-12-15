@@ -5,11 +5,13 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import util.InputHelper;
 
 
 /**
@@ -20,6 +22,11 @@ public class Demo {
     
     public static void main(String[] args) {
       
+        addStudentsToEducation();
+        
+        System.exit(0);
+        
+        
         
         DaoImplementation schoolDB = DaoImplementation.getInstance();
         
@@ -81,4 +88,46 @@ public class Demo {
 //        Person elev = schoolDB.findById(0, new Student());
 //        System.out.println(elev);
     }
+    
+    // Testing stuff
+    private static void updateStudentName(final String newName, final int id) {
+        
+        String sql = "UPDATE STUDENT SET NAME=\"";
+        sql = sql.concat(newName+"\" WHERE ID = " + id);
+        
+        System.out.println(sql);
+    }
+    
+
+     private static void addStudentsToEducation() {
+        
+         InputHelper feedMe = new InputHelper();
+         
+        int courseID = feedMe.getInt("Please enter EDUCATION id:");
+        int input = 0;
+        System.out.println("Please enter student ID to add to EDUCATION");
+
+        Set<Integer> studentsToAdd = new HashSet<>();
+        while (input != -1) {
+            input = feedMe.getInt("One entry per line, enter -1 to end");
+            if (input != -1)
+                studentsToAdd.add(input);
+        }
+        
+        final int EDUCATION_ID = 6;
+        
+        StringBuffer sql = new StringBuffer(" INSERT INTO EDUCATION_STUDENT"
+                + " (Education_ID, studentGroup_ID) VALUES");
+
+        Iterator myIterator = studentsToAdd.iterator();
+        while (myIterator.hasNext()) {
+            sql.append("("+ EDUCATION_ID + ","+myIterator.next()+"),");
+        }
+         // removes the last ',' character
+        sql.deleteCharAt(sql.length()-1);
+        
+        System.out.println(sql);
+     }
+        
+    
 }

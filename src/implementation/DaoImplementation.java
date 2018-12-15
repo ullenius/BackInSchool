@@ -157,8 +157,26 @@ public class DaoImplementation {
         myQuery.executeUpdate();
         
         em.getTransaction().commit();
+    }
+    
+    /**
+     * Performs custom native SQL-query
+     * Helper method used by other methods in this class
+     * 
+     * Dangerous! Use with caution
+     * 
+     * @param customQuery 
+     */
+    private boolean customQuery(final String customQuery) {
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
         
+        Query myQuery = em.createNativeQuery(customQuery);
+        int result = myQuery.executeUpdate();
         
+        em.getTransaction().commit();
+        
+        return (result > 0);
     }
     
     /**
@@ -363,6 +381,61 @@ public class DaoImplementation {
         return (results);
     }
     
-}
+    public void updateStudentName(final String newName, final int id) {
+        
+        String sql = "UPDATE STUDENT SET NAME=\"";
+        sql = sql.concat(newName+"\" WHERE ID = " + id);
+
+        customQuery(sql);
+        
+    }
+
+    public void updateTeacherName(final String newName, final int id) {
+        
+        String sql = "UPDATE TEACHER SET NAME=\"";
+        sql = sql.concat(newName+"\" WHERE ID = " + id);
+        
+        customQuery(sql);
+    }
+
+    public void updateCourseName(final String newName, final int id) {
+        
+        String sql = "UPDATE COURSE SET NAME=\"";
+        sql = sql.concat(newName+"\" WHERE ID = " + id);
+        
+        customQuery(sql);
+        
+    }
     
+    /**
+     * Uses Integer so that it can be set to NULL since supervisor_ID
+     * allows NULL in the database table. By sending null it gets parsed
+     * by Java as null in the String used in the SQL-statement
+     *
+     * More precisely: UPDATE COURSE SET SUPERVISOR_ID = null
+     * which is valid SQL :)
+     *
+     * @param courseID
+     * @param supervisorID
+     */
+    public void updateSupervisor(final int courseID, final Integer supervisorID) {
+        
+        String sql = "UPDATE COURSE SET SUPERVISOR_ID=" + supervisorID;
+        sql = sql.concat(" WHERE ID = " + courseID);
+        
+        customQuery(sql);
+    }
+    
+    public void updateEducationName(final String newName, final int id) {
+        
+        String sql = "UPDATE EDUCATION SET NAME=\"";
+        sql = sql.concat(newName+"\" WHERE ID = " + id);
+        
+        customQuery(sql);
+        
+    }
+    
+    
+}
+
 
