@@ -6,6 +6,9 @@
 * Listing all Teachers
 * Listing all Courses
 * Listing all Educations
+*
+* ALL methods are static
+*
 */
 package menu;
 
@@ -40,7 +43,7 @@ public final class ListAllMenu {
     private ListAllMenu() { // exists only to defeat instantiation
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         
         int userChoice = -1;
         

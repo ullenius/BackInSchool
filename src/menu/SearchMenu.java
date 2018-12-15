@@ -1,6 +1,9 @@
 /*
 * This is a helper class containing menu and methods
 * for SEARCHING entries in the database based on the id column
+*
+* ALL methods are static
+*
 */
 package menu;
 
@@ -35,15 +38,14 @@ public final class SearchMenu {
         schoolDB = DaoImplementation.getInstance();
     }
     
-    private SearchMenu() { // private constructor
+    private SearchMenu() { // exists only to defeat instantiation
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         
         int userChoice = -1;
         
         System.out.println("SEARCH BY ID SUBMENU");
-        
         System.out.println("Searching for entries in the database");
         
         System.out.println("1. " + STUDENT);
@@ -53,7 +55,6 @@ public final class SearchMenu {
         System.out.println("5. " + EXIT);
         
         int targetID = -1;
-        
         
         while (true) {
             userChoice = feedMe.getInt("Please make your selection:");
@@ -87,11 +88,9 @@ public final class SearchMenu {
                     break;
             }
         }
-        
     }
     
-    
-    private String findStudentById(int id) {
+    private static String findStudentById(int id) {
         
         Student foundStudent = schoolDB.findStudentById(id);
         
@@ -107,7 +106,7 @@ public final class SearchMenu {
         return result;
     }
     
-    private String findTeacherById(int id) {
+    private static String findTeacherById(int id) {
         
         Teacher foundTeacher = schoolDB.findTeacher(id);
         
@@ -123,7 +122,7 @@ public final class SearchMenu {
         return result;
     }
     
-    private String findCourseById(int id) {
+    private static String findCourseById(int id) {
         Course foundCourse = schoolDB.findCourse(id);
         
         /**
@@ -139,7 +138,7 @@ public final class SearchMenu {
         
     }
     
-    private String findEducationById(int id) {
+    private static String findEducationById(int id) {
         Course foundEducation = schoolDB.findCourse(id);
         /**
          * Default return message if search yields 0 results

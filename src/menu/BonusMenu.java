@@ -3,6 +3,9 @@
 * from the database. Mostly using native SQL queries.
 * Did not fit within the other categories
 * (and bonus sounds more fun than misc)
+*
+* ALL methods are static
+*
 */
 package menu;
 
@@ -36,10 +39,10 @@ public final class BonusMenu {
         schoolDB = DaoImplementation.getInstance();
     }
     
-    private BonusMenu() { //private constructor
+    private BonusMenu() { // exits only to prevent instantiation
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         
         int userChoice = -1;
         

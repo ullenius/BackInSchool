@@ -1,3 +1,12 @@
+ /**
+  *
+  * This is a helper class containing a CRUD-menu
+  * as well as a SEARCH- and BONUS-submenus
+  *
+  * ALL methods are static
+  *
+  * @author Anosh D. Ullenius <anosh@anosh.se>
+  */
 package menu;
 
 import database.Student;
@@ -6,13 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import util.InputHelper;
 
-/**
- *
- * This is a helper class containing a CRUD-menu
- * as well as a SEARCH- and BONUS-submenus
- *
- * @author Anosh D. Ullenius <anosh@anosh.se>
- */
+
 public final class MainMenu {
     
     private static final String CREATE;
@@ -39,10 +42,10 @@ public final class MainMenu {
         schoolDB = DaoImplementation.getInstance();
     }
     
-    private MainMenu() { //private constructor
+    private MainMenu() { // exists only to defeat instantiation
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         int userChoice = -1;
         
         System.out.println("Adding submenu");
@@ -90,6 +93,7 @@ public final class MainMenu {
         
     }
     
+    @Deprecated
     public static void main(String[] args) {
         
         statistics();
@@ -113,7 +117,7 @@ public final class MainMenu {
         int choice = sc.nextInt();
         
         // singleton :)
-        DaoImplementation schoolDB = DaoImplementation.getInstance(); 
+        DaoImplementation schoolDB = DaoImplementation.getInstance();
         
         List<Student> results = schoolDB.listStudentsInCourse(choice);
         

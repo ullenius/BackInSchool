@@ -1,6 +1,9 @@
 /*
 * This is a helper class containing the DELETE menu
 * and its implementation
+*
+* ALL methods are static
+*
 */
 package menu;
 
@@ -32,15 +35,14 @@ public final class DeleteMenu {
         schoolDB = DaoImplementation.getInstance();
     }
     
-    private DeleteMenu() { //private constructor
+    private DeleteMenu() { // exists only to prevent instantiation
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         
         int userChoice = -1;
         
         System.out.println("DELETION SUBMENU");
-        
         System.out.println("Deleting entries from database");
         
         System.out.println("1. " + STUDENT);
@@ -83,9 +85,6 @@ public final class DeleteMenu {
                     break;
             }
         }
-        
-        
-        
         
     }
     

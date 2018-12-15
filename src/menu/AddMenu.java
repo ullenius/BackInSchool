@@ -3,6 +3,8 @@
 * This is a helper class containing the ADD (CREATE) menu
 * and its implementation
 *
+* ALL methods are static
+*
 */
 package menu;
 
@@ -20,7 +22,7 @@ import util.InputHelper;
  */
 public final class AddMenu {
     
-    private AddMenu() { // private constructor
+    private AddMenu() { // exists only to prevent instantiation
     }
     
     private static final String STUDENT;
@@ -42,9 +44,13 @@ public final class AddMenu {
         schoolDB = DaoImplementation.getInstance();
     }
     
-    public void printMenu() {
+    public static void printMenu() {
         
         int userChoice = -1;
+        Person newStudent = null;
+        Person newTeacher = null;
+        Course newCourse = null;
+        Education newEducation = null;
         
         System.out.println("Adding submenu");
         
@@ -61,19 +67,19 @@ public final class AddMenu {
             switch (userChoice) {
                 
                 case 1:
-                    Person newStudent = makeStudent();
+                    newStudent = makeStudent();
                     schoolDB.addPerson(newStudent);
                     break;
                 case 2:
-                    Person newTeacher = makeTeacher();
+                    newTeacher = makeTeacher();
                     schoolDB.addPerson(newTeacher);
                     break;
                 case 3:
-                    Course newCourse = makeCourse();
+                    newCourse = makeCourse();
                     schoolDB.addCourse(newCourse);
                     break;
                 case 4:
-                    Education newEducation = makeEducation();
+                    newEducation = makeEducation();
                     schoolDB.addEducation(newEducation);
                     break;
                 case 5:
@@ -86,7 +92,7 @@ public final class AddMenu {
         }
     }
     
-    private Student makeStudent() {
+    private static Student makeStudent() {
         
         System.out.println("Creating a new Student object");
         
@@ -98,7 +104,7 @@ public final class AddMenu {
         return newStudent;
     }
     
-    private Teacher makeTeacher() {
+    private static Teacher makeTeacher() {
         
         System.out.println("Creating a new TEACHER object");
         
@@ -110,7 +116,7 @@ public final class AddMenu {
         return newTeacher;
     }
     
-    private Course makeCourse() {
+    private static Course makeCourse() {
         
         int supervisorID = -1;
         System.out.println("Creating a new COURSE object");
@@ -126,7 +132,7 @@ public final class AddMenu {
         return newCourse;
     }
     
-    private Education makeEducation() {
+    private static Education makeEducation() {
 
         System.out.println("Creating a new EDUCATION object");
         String name = feedMe.getText("Enter name");
