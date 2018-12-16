@@ -7,13 +7,8 @@
 */
 package menu;
 
-import database.Course;
-import database.Education;
-import database.Person;
-import database.Student;
 import implementation.DaoImplementation;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import util.InputHelper;
 
@@ -108,11 +103,14 @@ public final class UpdateMenu {
                     break;
                 case 7:
                     System.out.println(EDUCATION_REMOVE_STUDENTS);
+                    removeStudentsFromEducation();
                     break;
                 case 8:
                     System.out.println(EDUCATION_ADD_COURSES);
+                    addCoursesToEducation();
                     break;
                 case 9:
+                    removeCoursesFromEducation();
                     System.out.println(EDUCATION_REMOVE_COURSES);
                     break;
                 case 10:
@@ -173,33 +171,73 @@ public final class UpdateMenu {
     
     private static void addStudentsToEducation() {
         
-        /**
-         * 
-         * This takes input from the user and puts it in an
-         * int and a Set<Integer>
-         */
-        
         int educationID = feedMe.getInt("Please enter EDUCATION id:");
-        int input = 0;
-        System.out.println("Please enter student ID to add to EDUCATION");
-        
-        Set<Integer> studentsToAdd = new HashSet<>();
-        while (input != -1) {
-            input = feedMe.getInt("One entry per line, enter -1 to end");
-            if (input != -1)
-                studentsToAdd.add(input);
-        }
- 
+        Set<Integer> studentsToAdd = 
+                makeSet("Please enter student IDs to ADD to EDUCATION");
+   
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        
         schoolDB.addStudentsToEducation(educationID, studentsToAdd);
     }
     
-    public void removeStudentsFromEducation() {
+    private static void removeStudentsFromEducation() {
         
+        int educationID = feedMe.getInt("Please enter EDUCATION id:");
+        Set<Integer> studentsToRemove = 
+                makeSet("Please enter student IDs to REMOVE to EDUCATION");
+   
+        /**
+         * Sends the education ID and a Set<Integer> to the method
+         */
+        schoolDB.removeStudentsFromEducation(educationID, studentsToRemove);
+    }
+    /**
+         * 
+         * This is an interactive method for user I/O
+         * 
+         * Takes input from the user and puts it in an
+         * int and a Set<Integer>
+         * 
+         * This is a helper method.
+         * 
+         * Design pattern: DRY - don't repeat yourself
+         */
+    private static Set<Integer> makeSet(String message)  {
         
+        int input = 0;
+        Set<Integer> groupOfStudentIDs = new HashSet<>();
+        System.out.println(message);
+        
+        while (input != -1) {
+            input = feedMe.getInt("One entry per line, enter -1 to end");
+            if (input != -1)
+                groupOfStudentIDs.add(input);
+        }
+        return groupOfStudentIDs;
+    }
+    
+    private static void addCoursesToEducation() {
+        
+        int educationID = feedMe.getInt("Please enter EDUCATION id:");
+        Set<Integer> coursesToAdd = 
+                makeSet("Please enter COURSE IDs to ADD to EDUCATION");
+   
+        /**
+         * Sends the education ID and a Set<Integer> to the method
+         */
+        schoolDB.addCoursesToEducation(educationID, coursesToAdd);
+    }
+    
+    private static void removeCoursesFromEducation() {
+        
+        int educationID = feedMe.getInt("Please enter EDUCATION id:");
+        Set<Integer> coursesToRemove = 
+                makeSet("Please enter COURSE IDs to REMOVE to EDUCATION");
+        /**
+         * Sends the education ID and a Set<Integer> to the method
+         */
+        schoolDB.removeStudentsFromEducation(educationID, coursesToRemove);
     }
             
     

@@ -440,16 +440,15 @@ public class DaoImplementation {
     }
     
     /**
-     * 
+     * This method makes ONE SQL-query in order to ADD all entries at once
      * Uses Set for speed
      * Uses StringBuffer to avoid filling up the String-pool with junk Strings
      * 
-     * BUGS: SQL only supports adding 1000 entries at a 
+     * BUGS: SQL only supports adding 1000 entries at once
      * 
      * @param educationID
      * @param studentIdsToAdd 
      */
-    
     public void addStudentsToEducation(int educationID, final Set<Integer> studentIdsToAdd) {
         
         StringBuffer sql = new StringBuffer("INSERT INTO EDUCATION_STUDENT"
@@ -465,7 +464,15 @@ public class DaoImplementation {
         customQuery(sql.toString()); // executes the Query
     }
     
-    public void RemoveStudentsFromEducation(int educationID, final Set<Integer> studentIdsToRemove) {
+    /**
+     * 
+     * This method makes ONE SQL-query in order to REMOVE all entries at once
+     * @param educationID
+     * @param studentIdsToRemove 
+     */
+    
+    public void removeStudentsFromEducation(final int educationID, final Set<Integer> studentIdsToRemove) {
+        
         
          StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_STUDENT " +
         "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
@@ -477,11 +484,39 @@ public class DaoImplementation {
 
         // replaces the last character ',' with an ending ')'
         sql.setCharAt(sql.length(), ')');
-        System.out.println(sql);
         
-        //customQuery(sql.toString());
+        customQuery(sql.toString()); // executes the query
     }
     
+    public void addCoursesToEducation(final int educationID, final Set<Integer> courseIDsToAdd) {
+        
+         StringBuffer sql = new StringBuffer("INSERT INTO EDUCATION_COURSE "
+                + " (Education_ID, courseGroup_ID) VALUES");
+        
+        Iterator myIterator = courseIDsToAdd.iterator();
+        while (myIterator.hasNext()) {
+            sql.append("("+ educationID + ","+myIterator.next()+"),");
+        }
+         // removes the last ',' character
+        sql.deleteCharAt(sql.length()-1);
+        
+        customQuery(sql.toString()); // executes the Query
+    }
+    
+    public void removeCoursesFromEducation(final int educationID, final Set<Integer> courseIDsToRemove) {
+    
+        StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_COURSE " +
+        "WHERE Education_ID =" +educationID + " AND courseGroup_ID IN (");
+        
+        Iterator myIterator = courseIDsToRemove.iterator();
+        while (myIterator.hasNext()) {
+            sql.append(myIterator.next() + ",");
+        }
+        // replaces the last character ',' with an ending ')'
+        sql.setCharAt(sql.length(), ')');
+        
+        customQuery(sql.toString()); // executes the query
+    }
 }
 
 
