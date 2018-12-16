@@ -479,7 +479,7 @@ public class DaoImplementation {
         }
 
         // replaces the last character ',' with an ending ')'
-        sql.setCharAt(sql.length(), ')');
+        sql.setCharAt(sql.length()-1, ')');
         
         customQuery(sql.toString()); // executes the query
     }
@@ -509,7 +509,7 @@ public class DaoImplementation {
             sql.append(myIterator.next() + ",");
         }
         // replaces the last character ',' with an ending ')'
-        sql.setCharAt(sql.length(), ')');
+        sql.setCharAt(sql.length()-1, ')');
         
         customQuery(sql.toString()); // executes the query
     }

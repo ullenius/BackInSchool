@@ -58,24 +58,28 @@ public final class DeleteMenu {
             switch (userChoice) {
                 
                 case 1:
+                    System.out.println(STUDENT);
                     targetID = feedMe.getInt("Enter STUDENT id to delete: ");
                     schoolDB.deleteStudent(targetID);
                     System.out.println("Deleting STUDENT" + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
+                    System.out.println(TEACHER);
                     targetID = feedMe.getInt("Enter TEACHER id to delete: ");
                     schoolDB.deleteTeacher(targetID);
                     System.out.println("Deleting TEACHER " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:
+                    System.out.println(COURSE);
                     targetID = feedMe.getInt("Enter COURSE id to delete: ");
                     schoolDB.deleteCourse(targetID);
                     System.out.println("Deleting COURSE " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 4:
+                    System.out.println(EDUCATION);
                     targetID = feedMe.getInt("Enter EDUCATION id to delete: ");
                     schoolDB.deleteEducation(targetID);
                     System.out.println("Deleting EDUCATION " + targetID);

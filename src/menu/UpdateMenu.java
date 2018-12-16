@@ -29,7 +29,7 @@ public final class UpdateMenu {
     private static final String EDUCATION;
     private static final String EDUCATION_ADD_STUDENTS;
     private static final String EDUCATION_REMOVE_STUDENTS;
-
+    
     private static final String EDUCATION_ADD_COURSES;
     private static final String EDUCATION_REMOVE_COURSES;
     private static final String EXIT;
@@ -59,59 +59,68 @@ public final class UpdateMenu {
         
         int userChoice = -1;
         
-        System.out.println("UPDATE submenu");
-        System.out.println("UPDATING entries in database");
-        
-        System.out.println("1. " + STUDENT);
-        System.out.println("2. " + TEACHER);
-        System.out.println("3. " + COURSE);
-        System.out.println("4. " + SUPERVISOR);
-        System.out.println("5. " + EDUCATION);
-        System.out.println("6. " + EDUCATION_ADD_STUDENTS);
-        System.out.println("7. " + EDUCATION_REMOVE_STUDENTS);
-        System.out.println("8. " + EDUCATION_ADD_COURSES);
-        System.out.println("9. " + EDUCATION_REMOVE_COURSES);
-        System.out.println("10. " + EXIT);
-        
         while (true) {
+            System.out.println("UPDATE submenu");
+            System.out.println("UPDATING entries in database");
+            
+            System.out.println("1. " + STUDENT);
+            System.out.println("2. " + TEACHER);
+            System.out.println("3. " + COURSE);
+            System.out.println("4. " + SUPERVISOR);
+            System.out.println("5. " + EDUCATION);
+            System.out.println("6. " + EDUCATION_ADD_STUDENTS);
+            System.out.println("7. " + EDUCATION_REMOVE_STUDENTS);
+            System.out.println("8. " + EDUCATION_ADD_COURSES);
+            System.out.println("9. " + EDUCATION_REMOVE_COURSES);
+            System.out.println("10. " + EXIT);
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
                 case 1:
                     System.out.println(STUDENT);
                     updateStudentName();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     System.out.println(TEACHER);
                     updateTeacherName();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     System.out.println(COURSE);
                     updateCourseName();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     System.out.println(SUPERVISOR);
                     updateSupervisor();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 5:
                     System.out.println(EDUCATION);
                     updateEducationName();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 6:
                     System.out.println(EDUCATION_ADD_STUDENTS);
                     addStudentsToEducation();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 7:
                     System.out.println(EDUCATION_REMOVE_STUDENTS);
                     removeStudentsFromEducation();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 8:
                     System.out.println(EDUCATION_ADD_COURSES);
                     addCoursesToEducation();
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 9:
                     removeCoursesFromEducation();
                     System.out.println(EDUCATION_REMOVE_COURSES);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 10:
                     System.out.println("Exiting menu");
@@ -172,37 +181,42 @@ public final class UpdateMenu {
     private static void addStudentsToEducation() {
         
         int educationID = feedMe.getInt("Please enter EDUCATION id:");
-        Set<Integer> studentsToAdd = 
+        Set<Integer> studentsToAdd =
                 makeSet("Please enter student IDs to ADD to EDUCATION");
-   
+        
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
         schoolDB.addStudentsToEducation(educationID, studentsToAdd);
+        
+            System.out.println("Successfully added " + studentsToAdd.size() 
+                  + " students to education");
     }
     
     private static void removeStudentsFromEducation() {
         
         int educationID = feedMe.getInt("Please enter EDUCATION id:");
-        Set<Integer> studentsToRemove = 
+        Set<Integer> studentsToRemove =
                 makeSet("Please enter student IDs to REMOVE to EDUCATION");
-   
+        
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
         schoolDB.removeStudentsFromEducation(educationID, studentsToRemove);
+          System.out.println("Successfully removed " + studentsToRemove.size() 
+                  + " students to education");
     }
     /**
-         * 
-         * This is an interactive method for user I/O
-         * 
-         * Takes input from the user and puts it in an
-         * int and a Set<Integer>
-         * 
-         * This is a helper method.
-         * 
-         * Design pattern: DRY - don't repeat yourself
-         */
+     *
+     * This is an interactive method for user I/O
+     *
+     * Takes input from the user and puts it in an
+     * int and a Set<Integer>
+     *
+     * This is a helper method.
+     *
+     * Design pattern: DRY - don't repeat yourself
+     */
     private static Set<Integer> makeSet(String message)  {
         
         int input = 0;
@@ -220,9 +234,9 @@ public final class UpdateMenu {
     private static void addCoursesToEducation() {
         
         int educationID = feedMe.getInt("Please enter EDUCATION id:");
-        Set<Integer> coursesToAdd = 
+        Set<Integer> coursesToAdd =
                 makeSet("Please enter COURSE IDs to ADD to EDUCATION");
-   
+        
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
@@ -232,13 +246,13 @@ public final class UpdateMenu {
     private static void removeCoursesFromEducation() {
         
         int educationID = feedMe.getInt("Please enter EDUCATION id:");
-        Set<Integer> coursesToRemove = 
+        Set<Integer> coursesToRemove =
                 makeSet("Please enter COURSE IDs to REMOVE to EDUCATION");
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        schoolDB.removeStudentsFromEducation(educationID, coursesToRemove);
+        schoolDB.removeCoursesFromEducation(educationID, coursesToRemove);
     }
-            
+    
     
 }
