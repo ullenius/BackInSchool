@@ -9,11 +9,15 @@ import database.Person;
 import database.Student;
 import database.Teacher;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import util.InputHelper;
 
 /**
  *
@@ -435,6 +439,48 @@ public class DaoImplementation {
         
     }
     
+    /**
+     * 
+     * Uses Set for speed
+     * Uses StringBuffer to avoid filling up the String-pool with junk Strings
+     * 
+     * BUGS: SQL only supports adding 1000 entries at a 
+     * 
+     * @param educationID
+     * @param studentIdsToAdd 
+     */
+    
+    public void addStudentsToEducation(int educationID, final Set<Integer> studentIdsToAdd) {
+        
+        StringBuffer sql = new StringBuffer("INSERT INTO EDUCATION_STUDENT"
+                + " (Education_ID, studentGroup_ID) VALUES");
+        
+        Iterator myIterator = studentIdsToAdd.iterator();
+        while (myIterator.hasNext()) {
+            sql.append("("+ educationID + ","+myIterator.next()+"),");
+        }
+         // removes the last ',' character
+        sql.deleteCharAt(sql.length()-1);
+        
+        customQuery(sql.toString()); // executes the Query
+    }
+    
+    public void RemoveStudentsFromEducation(int educationID, final Set<Integer> studentIdsToRemove) {
+        
+         StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_STUDENT " +
+        "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
+        
+        Iterator myIterator = studentIdsToRemove.iterator();
+        while (myIterator.hasNext()) {
+            sql.append(myIterator.next() + ",");
+        }
+
+        // replaces the last character ',' with an ending ')'
+        sql.setCharAt(sql.length(), ')');
+        System.out.println(sql);
+        
+        //customQuery(sql.toString());
+    }
     
 }
 

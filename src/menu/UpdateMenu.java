@@ -43,13 +43,13 @@ public final class UpdateMenu {
     private static final InputHelper feedMe;
     
     static {
-        STUDENT = "Update student";
-        TEACHER = "Update teacher";
-        COURSE = "Update course";
+        STUDENT = "Update student name";
+        TEACHER = "Update teacher name";
+        COURSE = "Update course name";
         
         SUPERVISOR = "Set a new supervisor";
         
-        EDUCATION = "Update education";
+        EDUCATION = "Update education name";
         EDUCATION_ADD_STUDENTS = "ADD students to education";
         EDUCATION_REMOVE_STUDENTS = "DELETE students from education";
         EDUCATION_ADD_COURSES = "ADD courses to education";
@@ -104,6 +104,7 @@ public final class UpdateMenu {
                     break;
                 case 6:
                     System.out.println(EDUCATION_ADD_STUDENTS);
+                    addStudentsToEducation();
                     break;
                 case 7:
                     System.out.println(EDUCATION_REMOVE_STUDENTS);
@@ -172,41 +173,34 @@ public final class UpdateMenu {
     
     private static void addStudentsToEducation() {
         
-        int courseID = feedMe.getInt("Please enter EDUCATION id:");
+        /**
+         * 
+         * This takes input from the user and puts it in an
+         * int and a Set<Integer>
+         */
         
+        int educationID = feedMe.getInt("Please enter EDUCATION id:");
         int input = 0;
-        
         System.out.println("Please enter student ID to add to EDUCATION");
         
         Set<Integer> studentsToAdd = new HashSet<>();
-        
         while (input != -1) {
             input = feedMe.getInt("One entry per line, enter -1 to end");
             if (input != -1)
                 studentsToAdd.add(input);
         }
+ 
+        /**
+         * Sends the education ID and a Set<Integer> to the method
+         */
         
-        final int EDUCATION_ID = 6;
-        
-        StringBuffer sql = new StringBuffer("INSERT INTO TABLE "
-                + "EDUCATION_STUDENT Education_ID, studentGroup_ID VALUES(");
-        Iterator myIterator = studentsToAdd.iterator();
-        
-        while (myIterator.hasNext()) {
-            sql.append("(" + EDUCATION_ID + ", "+myIterator.next()+")");
-        }
-        
-        System.out.println(sql);
-        
-        
-        
-        
+        schoolDB.addStudentsToEducation(educationID, studentsToAdd);
+    }
+    
+    public void removeStudentsFromEducation() {
         
         
     }
             
-//                EDUCATION_ADD_STUDENTS = "ADD students to education";
-//    EDUCATION_ADD_STUDENTS);
-    
     
 }

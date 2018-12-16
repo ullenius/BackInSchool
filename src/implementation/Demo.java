@@ -5,8 +5,10 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,13 +18,24 @@ import util.InputHelper;
 
 /**
  *
+ * This is whole class is solely meant for Testing stuff
+ * 
+ * 
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class Demo {
+public final class Demo {
+    
+    private Demo() {
+    }
     
     public static void main(String[] args) {
       
-        addStudentsToEducation();
+        List<Integer> numbers = Arrays.asList(10,15,20,30,40);
+        Set<Integer> studentID = new HashSet<>();
+        // add them all to the HashSet
+        numbers.forEach( (e) -> studentID.add(e));
+                
+        removeStudentsFromEducation(15, studentID);
         
         System.exit(0);
         
@@ -128,6 +141,23 @@ public class Demo {
         
         System.out.println(sql);
      }
+     
+       public static void removeStudentsFromEducation(int educationID, final Set<Integer> studentIdsToRemove) {
+        
+         StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_STUDENT " +
+        "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
+        
+        Iterator myIterator = studentIdsToRemove.iterator();
+        while (myIterator.hasNext()) {
+            sql.append(myIterator.next() + ",");
+        }
+
+        // replaces the last character ',' with an ending ')'
+        sql.setCharAt(sql.length()-1, ')');
+        System.out.println(sql);
+        
+        //customQuery(sql.toString());
+    }
         
     
 }
