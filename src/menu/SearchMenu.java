@@ -8,6 +8,7 @@
 package menu;
 
 import database.Course;
+import database.Education;
 import database.Student;
 import database.Teacher;
 import implementation.DaoImplementation;
@@ -44,7 +45,9 @@ public final class SearchMenu {
     public static void printMenu() {
         
         int userChoice = -1;
+        int targetID = -1;
         
+        while (true) {
         System.out.println("SEARCH BY ID SUBMENU");
         System.out.println("Searching for entries in the database");
         
@@ -54,9 +57,7 @@ public final class SearchMenu {
         System.out.println("4. " + EDUCATION);
         System.out.println("5. " + EXIT);
         
-        int targetID = -1;
         
-        while (true) {
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -139,7 +140,7 @@ public final class SearchMenu {
     }
     
     private static String findEducationById(int id) {
-        Course foundEducation = schoolDB.findCourse(id);
+        Education foundEducation = schoolDB.findEducation(id);
         /**
          * Default return message if search yields 0 results
          */
