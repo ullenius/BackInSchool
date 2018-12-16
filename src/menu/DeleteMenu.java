@@ -41,19 +41,19 @@ public final class DeleteMenu {
     public static void printMenu() {
         
         int userChoice = -1;
-        
-        System.out.println("DELETION SUBMENU");
-        System.out.println("Deleting entries from database");
-        
-        System.out.println("1. " + STUDENT);
-        System.out.println("2. " + TEACHER);
-        System.out.println("3. " + COURSE);
-        System.out.println("4. " + EDUCATION);
-        System.out.println("5. " + EXIT);
-        
         int targetID = -1;
         
         while (true) {
+            System.out.println("DELETION SUBMENU");
+            System.out.println("Deleting entries from database");
+            
+            System.out.println("1. " + STUDENT);
+            System.out.println("2. " + TEACHER);
+            System.out.println("3. " + COURSE);
+            System.out.println("4. " + EDUCATION);
+            System.out.println("5. " + EXIT);
+            
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -61,21 +61,25 @@ public final class DeleteMenu {
                     targetID = feedMe.getInt("Enter STUDENT id to delete: ");
                     schoolDB.deleteStudent(targetID);
                     System.out.println("Deleting STUDENT" + targetID);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     targetID = feedMe.getInt("Enter TEACHER id to delete: ");
                     schoolDB.deleteTeacher(targetID);
                     System.out.println("Deleting TEACHER " + targetID);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     targetID = feedMe.getInt("Enter COURSE id to delete: ");
                     schoolDB.deleteCourse(targetID);
                     System.out.println("Deleting COURSE " + targetID);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     targetID = feedMe.getInt("Enter EDUCATION id to delete: ");
                     schoolDB.deleteEducation(targetID);
                     System.out.println("Deleting EDUCATION " + targetID);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 5:
                     System.out.println("Exiting menu");

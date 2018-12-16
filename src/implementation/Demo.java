@@ -13,6 +13,10 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import menu.AddMenu;
+import menu.BonusMenu;
+import menu.ListAllMenu;
+import menu.MainMenu;
 import util.InputHelper;
 
 
@@ -29,14 +33,21 @@ public final class Demo {
     }
     
     public static void main(String[] args) {
-      
-        List<Integer> numbers = Arrays.asList(10,15,20,30,40);
-        Set<Integer> studentID = new HashSet<>();
-        // add them all to the HashSet
-        numbers.forEach( (e) -> studentID.add(e));
-                
-        removeStudentsFromEducation(15, studentID);
         
+        MainMenu.printMenu();
+        //BonusMenu.printMenu();
+        //AddMenu.printMenu();
+        
+    //   ListAllMenu.printMenu();
+        
+//        List<Integer> numbers = Arrays.asList(10,15,20,30,40);
+//        Set<Integer> studentID = new HashSet<>();
+//        // add them all to the HashSet
+//        numbers.forEach( (e) -> studentID.add(e));
+//                
+//        removeStudentsFromEducation(15, studentID);
+        
+        System.out.println("exiting main-method!");
         System.exit(0);
         
         

@@ -45,20 +45,20 @@ public final class BonusMenu {
     public static void printMenu() {
         
         int userChoice = -1;
-        
-        System.out.println("BONUS SUBMENU");
-        System.out.println("Bonus options");
-        
-        System.out.println("1. " + STUDENTS_COURSE);
-        System.out.println("2. " + STUDENTS_EDUCATION);
-        System.out.println("3. " + UNSUPERVISED_COURSES);
-        System.out.println("4. " + LONELY_STUDENTS);
-        System.out.println("5. " + LONELY_TEACHERS);
-        System.out.println("6. " + EXIT);
-        
         int targetID = 0;
         
         while (true) {
+            System.out.println("BONUS SUBMENU");
+            System.out.println("Bonus options");
+            
+            System.out.println("1. " + STUDENTS_COURSE);
+            System.out.println("2. " + STUDENTS_EDUCATION);
+            System.out.println("3. " + UNSUPERVISED_COURSES);
+            System.out.println("4. " + LONELY_STUDENTS);
+            System.out.println("5. " + LONELY_TEACHERS);
+            System.out.println("6. " + EXIT);
+            
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -66,30 +66,36 @@ public final class BonusMenu {
                     System.out.println(STUDENTS_COURSE);
                     targetID = feedMe.getInt("Enter COURSE id: ");
                     schoolDB.listStudentsInCourse(targetID).forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     System.out.println(STUDENTS_EDUCATION);
                     targetID = feedMe.getInt("Enter EDUCATION id: ");
                     schoolDB.findEducation(targetID).getGroupOfStudents().forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     System.out.println(UNSUPERVISED_COURSES);
                     System.out.println("Displaying all UNSUPERVISED courses");
                     schoolDB.listUnsupervisedCourses().forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     System.out.println(LONELY_STUDENTS);
                     schoolDB.listLonelyStudents().forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 5:
                     System.out.println(LONELY_TEACHERS);
                     schoolDB.listLonelyTeachers().forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 6:
                     System.out.println("Exiting menu");
                     return; // exiting method
                 default:
                     System.out.println("Invalid selection");
+                    feedMe.getText("Press enter to continue");
                     break;
             }
         }

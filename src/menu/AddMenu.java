@@ -52,8 +52,8 @@ public final class AddMenu {
         Course newCourse = null;
         Education newEducation = null;
         
-        System.out.println("Adding submenu");
-        
+        while (true) {
+        System.out.println("ADDING SUB-MENU");
         System.out.println("Adding entries to database");
         
         System.out.println("1. " + STUDENT);
@@ -62,31 +62,35 @@ public final class AddMenu {
         System.out.println("4. " + EDUCATION);
         System.out.println("5. " + EXIT);
         
-        while (true) {
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
                 case 1:
                     newStudent = makeStudent();
                     schoolDB.addPerson(newStudent);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     newTeacher = makeTeacher();
                     schoolDB.addPerson(newTeacher);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     newCourse = makeCourse();
                     schoolDB.addCourse(newCourse);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     newEducation = makeEducation();
                     schoolDB.addEducation(newEducation);
+                    feedMe.getText("Press enter to continue");
                     break;
                 case 5:
                     System.out.println("Exiting menu");
                     return; // exiting method
                 default:
                     System.out.println("Invalid selection");
+                    feedMe.getText("Press enter to continue");
                     break;
             }
         }
@@ -124,6 +128,11 @@ public final class AddMenu {
         name = name.trim();
         Course newCourse = new Course(name);
         supervisorID = feedMe.getInt("Enter supervisor (teacher id): ");
+        
+        /**
+         * 
+         * Include option to have no supervisor set? I.e. NULL
+         */
         
         Teacher supervisor = schoolDB.findTeacher(supervisorID);
         newCourse.setSupervisor(supervisor);

@@ -8,8 +8,6 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import util.InputHelper;
 
 /**
  *
@@ -36,7 +33,6 @@ public class DaoImplementation {
     
     private DaoImplementation() {
         // Exists only to defeat instantiation
-        throw new AssertionError(); // if it somehow gets called anyway
     }
     
     public static DaoImplementation getInstance() {

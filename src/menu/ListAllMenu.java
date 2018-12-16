@@ -46,18 +46,17 @@ public final class ListAllMenu {
     public static void printMenu() {
         
         int userChoice = -1;
-        
-        System.out.println("LIST ALL SUBMENU");
-        
-        System.out.println("Display all entries from database");
-        
-        System.out.println("1. " + STUDENT);
-        System.out.println("2. " + TEACHER);
-        System.out.println("3. " + COURSE);
-        System.out.println("4. " + EDUCATION);
-        System.out.println("5. " + EXIT);
-        
         while (true) {
+            System.out.println("LIST ALL SUBMENU");
+            
+            System.out.println("Display all entries from database");
+            
+            System.out.println("1. " + STUDENT);
+            System.out.println("2. " + TEACHER);
+            System.out.println("3. " + COURSE);
+            System.out.println("4. " + EDUCATION);
+            System.out.println("5. " + EXIT);
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
