@@ -1,6 +1,5 @@
 package database;
 
-
 import database.dao.Persistable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

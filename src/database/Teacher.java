@@ -1,6 +1,5 @@
 package database;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +18,7 @@ public class Teacher implements Person {
     private String name;
     
     public Teacher() {
+        name = null;
     }
     
     public Teacher(String name) {

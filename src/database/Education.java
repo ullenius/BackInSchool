@@ -1,5 +1,13 @@
-package database;
+/**
+ *
+ * This class contains 2 Sets, the get-methods
+ * however return immutable (unmodifiable) Sets in order to
+ * fully comply with the principles of object encapsulation.
+ * 
+ * @author Anosh D. Ullenius <anosh@anosh.se>
+ */
 
+package database;
 
 import database.dao.Persistable;
 import java.util.Collections;
@@ -11,10 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-/**
- *
- * @author Anosh D. Ullenius <anosh@anosh.se>
- */
+
 @Entity
 public class Education implements Persistable {
     
@@ -29,8 +34,9 @@ public class Education implements Persistable {
    @ManyToMany
    private Set<Course> courseGroup;
    
-   
    public Education() {
+       this.studentGroup = new HashSet<>();
+       this.courseGroup = new HashSet<>();
    }
    
    public Education(String name) {
@@ -59,6 +65,7 @@ public class Education implements Persistable {
        return name;
    }
    
+   @Override
    public String toString() {
        return id + " " + name;
    }

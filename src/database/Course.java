@@ -1,6 +1,5 @@
 package database;
 
-
 import database.dao.Persistable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +9,6 @@ import javax.persistence.ManyToOne;
 
 /**
  *
- * 3 konstruktorer,
- * 1. zero-argument (required by EE/Hibernate)
- * 2. en med String name
- * 3. en med String name, Teacher supervisor
- * 
- * 
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
 @Entity
@@ -28,8 +21,6 @@ public class Course implements Persistable {
     
     @ManyToOne
     private Teacher supervisor;
-    
-    //2do, koppla ihop med Education
     
     public Course() {
         name = null;
@@ -59,7 +50,7 @@ public class Course implements Persistable {
     }
     
     public String toString() {
-        return getName();
+        return id + " " + name;
     }
     
 }

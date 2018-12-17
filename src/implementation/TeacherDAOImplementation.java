@@ -1,5 +1,5 @@
 /*
-* 
+* Implementation of Teacher DAO
 */
 package implementation;
 
@@ -47,7 +47,6 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
      * 
      * @param id 
      */
-    
     @Override
     public void deleteTeacher(int id) {
         em.getTransaction().begin();
@@ -93,7 +92,6 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         em.getTransaction().commit();
         return (results);
     }
-    
     
     @Override
     public List<Teacher> listLonelyTeachers() {

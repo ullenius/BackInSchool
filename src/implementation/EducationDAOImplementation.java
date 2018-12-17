@@ -187,6 +187,5 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         
         customQuery(sql.toString()); // executes the query
     }
-        
     
 }

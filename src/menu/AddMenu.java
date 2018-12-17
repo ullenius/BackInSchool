@@ -142,6 +142,4 @@ public final class AddMenu extends AbstractMenu {
         return newEducation;
     }
     
-    
-    
 }
