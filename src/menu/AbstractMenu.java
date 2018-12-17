@@ -18,8 +18,8 @@ import util.InputHelper;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public abstract class AbstractMenu {
-  
+abstract class AbstractMenu {
+    
     static final CourseDAOImplementation courseDAO;
     static final EducationDAOImplementation educationDAO;
     static final TeacherDAOImplementation teacherDAO;
@@ -33,7 +33,7 @@ public abstract class AbstractMenu {
         EXIT = "Exit menu";
         feedMe = new InputHelper();
         
-         // initialise the DAOs
+        // initialise the DAOs
         courseDAO = CourseDAOImplementation.getInstance();
         educationDAO = EducationDAOImplementation.getInstance();
         teacherDAO = TeacherDAOImplementation.getInstance();
