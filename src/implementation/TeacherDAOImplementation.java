@@ -7,25 +7,18 @@ import database.Person;
 import database.Teacher;
 import database.dao.TeacherDAO;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class TeacherDAOImplementation implements TeacherDAO {
+public class TeacherDAOImplementation extends AbstractImplementation implements TeacherDAO {
     
     private static TeacherDAOImplementation instance;
-    private static final EntityManagerFactory emf;
-    private static final EntityManager em;
     
     static {
-        emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         instance = null; //singleton stuff. See getInstance()
-        em = emf.createEntityManager();
     }
     
     private TeacherDAOImplementation() {
@@ -39,22 +32,33 @@ public class TeacherDAOImplementation implements TeacherDAO {
         return instance;
     }
     
+    /**
+     * 
+     * This method removes the Teacher with the given id
+     * But first it sets all Supervisor foreign-key references
+     * in the COURSE-table to NULL. Teacher.ID is the foreign key 
+     * supervisor_id in COURSE.
+     * 
+     * It uses native SQL to do this using only one Query
+     * 
+     * Then it proceeds to delete the entry
+     * 
+     * Total number of queries executed: 2
+     * 
+     * @param id 
+     */
+    
     @Override
     public void deleteTeacher(int id) {
         em.getTransaction().begin();
         
-        // BEHÖVER KOD SOM ÄNDRAR ALLA ENTRIES
-        // I COURSE DÄR SUPER_VISOR ID = id (teacher id i paramtern)
-        // till NULL
-        
-        // FOREIGN KEY, teacher.id = course.supervisor_id
-        Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
+        Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET "
+                + "SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
         supervisorCleanup.setParameter("target", id);
         supervisorCleanup.executeUpdate();
         
         Query myQuery = em.createNativeQuery("DELETE FROM TEACHER WHERE ID = ?target;");
         myQuery.setParameter("target", id);
-        
         myQuery.executeUpdate();
         
         em.getTransaction().commit();
@@ -62,30 +66,19 @@ public class TeacherDAOImplementation implements TeacherDAO {
     
     @Override
     public void addPerson(Person personToAdd) {
-        em.getTransaction().begin();
-        
-        em.persist(personToAdd);
-        
-        em.getTransaction().commit();
+       persistStuff(personToAdd);
     }
     
     @Deprecated
     // Deprecated by addPerson method
     public void addTeacher(Teacher teacherToAdd) {
-
-        em.getTransaction().begin();
-        em.persist(teacherToAdd);
-        em.getTransaction().commit();
+        persistStuff(teacherToAdd);
     }
     
     @Override
-    public Teacher findTeacher(int id) {
-        em.getTransaction().begin();
-        
-        Teacher result = em.find(Teacher.class, id);
-        em.getTransaction().commit();
-        
-        return result;
+    public Teacher findTeacher(final int id) {
+       
+        return findById(Teacher.class,id);
     }
     
     @Override
@@ -101,11 +94,11 @@ public class TeacherDAOImplementation implements TeacherDAO {
         return (results);
     }
     
+    
     @Override
     public List<Teacher> listLonelyTeachers() {
-        
         /**
-         * Lists all TEACHERS who do NOT supervise any COURSE
+         * This query lists all TEACHERS who do NOT supervise any COURSE
          * that is, *WITHOUT* ties to any COURSE
          */
         final String sql = "SELECT TEACHER.NAME,TEACHER.ID,COURSE.SUPERVISOR_ID " +
@@ -129,16 +122,5 @@ public class TeacherDAOImplementation implements TeacherDAO {
         sql = sql.concat(newName+"\" WHERE ID = " + id);
         
         customQuery(sql);
-    }
-    
-    private boolean customQuery(final String customQuery) {
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(customQuery);
-        int result = myQuery.executeUpdate();
-        
-        em.getTransaction().commit();
-        
-        return (result > 0);
     }
 }

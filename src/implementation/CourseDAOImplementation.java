@@ -1,5 +1,5 @@
 /*
-*
+* Implementation of CourseDAO interface
 */
 package implementation;
 
@@ -7,25 +7,18 @@ import database.Course;
 import database.Student;
 import database.dao.CourseDAO;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class CourseDAOImplementation implements CourseDAO {
+public class CourseDAOImplementation extends AbstractImplementation implements CourseDAO {
     
     private static CourseDAOImplementation instance;
-    private static final EntityManagerFactory emf;
-    private static final EntityManager em;
     
     static {
-        emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         instance = null; //singleton stuff. See getInstance()
-        em = emf.createEntityManager();
     }
     
     private CourseDAOImplementation() {
@@ -41,11 +34,7 @@ public class CourseDAOImplementation implements CourseDAO {
     
     @Override
     public void addCourse(final Course newCourse) {
-        em.getTransaction().begin();
-        
-        em.persist(newCourse);
-        
-        em.getTransaction().commit();
+       persistStuff(newCourse);
     }
     
     @Override
@@ -144,37 +133,8 @@ public class CourseDAOImplementation implements CourseDAO {
         return (results);
     }
     
-    /**
-     * Performs custom native SQL-query
-     * Helper method used by other methods in this class
-     *
-     * Dangerous! Use with caution
-     * 
-     * executeUpdate returns number of rows affected
-     * if they are > 0 it was successfully executed
-     *
-     * @param customQuery
-     */
-    private boolean customQuery(final String customQuery) {
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(customQuery);
-        int result = myQuery.executeUpdate();
-        
-        em.getTransaction().commit();
-        
-        return (result > 0);
-    }
-    
      public Course findCourse(final int id) {
-        
-        em.getTransaction().begin();
-        
-        Course result = em.find(Course.class, id);
-        
-        em.getTransaction().commit();
-        
-        return result;
+       return findById(Course.class,id);
     }
     
     

@@ -7,25 +7,18 @@ import database.Person;
 import database.Student;
 import database.dao.StudentDAO;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class StudentDAOImplementation implements StudentDAO {
+public class StudentDAOImplementation extends AbstractImplementation implements StudentDAO {
     
     private static StudentDAOImplementation instance;
-    private static final EntityManagerFactory emf;
-    private static final EntityManager em;
     
     static {
-        emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         instance = null; //singleton stuff. See getInstance()
-        em = emf.createEntityManager();
     }
     
     private StudentDAOImplementation() {
@@ -40,12 +33,15 @@ public class StudentDAOImplementation implements StudentDAO {
     }
     
     @Override
+    @Deprecated
+    // DEPRECATED by addPerson()
+    public void addStudent(final Student studentToAdd) {
+        persistStuff(studentToAdd);
+    }
+    
+    @Override
     public void addPerson(final Person personToAdd) {
-        em.getTransaction().begin();
-        
-        em.persist(personToAdd);
-        
-        em.getTransaction().commit();
+        persistStuff(personToAdd);
     }
     
     @Override
@@ -73,31 +69,10 @@ public class StudentDAOImplementation implements StudentDAO {
         
         em.getTransaction().commit();
     }
-    
-    /**
-     *
-     * Generic method that returns a Person object from the database
-     * based on id-number (as stored in the database)
-     *
-     * @param <T>
-     * @param id
-     * @param person
-     * @return
-     */
-    @Override
-    public <T extends Person> Person findById(final int id, final T person) {
-        
-        em.getTransaction().begin();
-        Person result = em.find(person.getClass(), id);
-        
-        return result;
-    }
-    
+
     @Override
     public Student findStudentById(final int id) {
-        em.getTransaction().begin();
-        Student foundStudent = em.find(Student.class, id);
-        return foundStudent;
+        return findById(Student.class,id);
     }
     
     @Override
@@ -148,6 +123,8 @@ public class StudentDAOImplementation implements StudentDAO {
      * we can simply perform a JOIN-operation to solve the problem at hand.
      * 
      */
+    
+    @Override
     public List<Student> listLonelyStudents() {
         
         final String sql = "SELECT STUDENT.ID,STUDENT.NAME " +
@@ -163,41 +140,6 @@ public class StudentDAOImplementation implements StudentDAO {
         em.getTransaction().commit();
         return (results);
     }
-    
-    
-    
-    @Override
-    @Deprecated
-    // DEPRECATED by addPerson()
-    public void addStudent(final Student studentToAdd) {
-        
-        em.getTransaction().begin();
-        
-        em.persist(studentToAdd);
-        
-        em.getTransaction().commit();
-    }
-    
-    /**
-     * Performs custom native SQL-query
-     * Helper method used by other methods in this class
-     *
-     * Dangerous! Use with caution
-     * 
-     * executeUpdate returns number of rows affected
-     * if they are > 0 it was successfully executed
-     *
-     * @param customQuery
-     */
-    private boolean customQuery(final String customQuery) {
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(customQuery);
-        int result = myQuery.executeUpdate();
-        
-        em.getTransaction().commit();
-        
-        return (result > 0);
-    }
+ 
     
 }

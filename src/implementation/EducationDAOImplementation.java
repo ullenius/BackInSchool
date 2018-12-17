@@ -8,26 +8,18 @@ import database.dao.EducationDAO;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public class EducationDAOImplementation implements EducationDAO {
+public class EducationDAOImplementation extends AbstractImplementation implements EducationDAO {
     
-     
     private static EducationDAOImplementation instance;
-    private static final EntityManagerFactory emf;
-    private static final EntityManager em;
     
     static {
-        emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         instance = null; //singleton stuff. See getInstance()
-        em = emf.createEntityManager();
     }
     
     private EducationDAOImplementation() {
@@ -43,24 +35,9 @@ public class EducationDAOImplementation implements EducationDAO {
 
     public void addEducation(final Education newEducation) {
         
-        em.getTransaction().begin();
-        
-        em.persist(newEducation);
-        em.getTransaction().commit();
+        persistStuff(newEducation);
     }
 
-    /**
-     * 
-     * Replace with a simple
-     * 
-     * em.remove(id) ?
-     * 
-     * Den är ju knuten till en entry i EDUCATION_COURSE
-     * och EDUCATION_STUDENT
-     * 
-     * 
-     * @param id 
-     */
     @Override
      public void deleteEducation(final int id) {
         
@@ -84,15 +61,15 @@ public class EducationDAOImplementation implements EducationDAO {
 
     @Override
     public Education findEducation(final int id) {
-        em.getTransaction().begin();
         
-        Education result = em.find(Education.class, id);
-        
-        em.getTransaction().commit();
-        
-        return result;
+        return findById(Education.class,id);
     }
 
+    /**
+     * 
+     * Returns an ordered list of Educations
+     * @return 
+     */
     @Override
     public List<Education> listAllEducations() {
         final String sql = "SELECT id,name FROM EDUCATION ORDER BY name;";
@@ -194,7 +171,6 @@ public class EducationDAOImplementation implements EducationDAO {
      * @param educationID
      * @param courseIDsToRemove 
      */
-    
     @Override
     public void removeCoursesFromEducation(final int educationID, 
             final Set<Integer> courseIDsToRemove) {
@@ -212,16 +188,5 @@ public class EducationDAOImplementation implements EducationDAO {
         customQuery(sql.toString()); // executes the query
     }
         
-    
-    private boolean customQuery(final String customQuery) {
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(customQuery);
-        int result = myQuery.executeUpdate();
-        
-        em.getTransaction().commit();
-        
-        return (result > 0);
-    }
     
 }

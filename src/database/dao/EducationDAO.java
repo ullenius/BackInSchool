@@ -19,10 +19,10 @@ public interface EducationDAO {
      * @param newEducation 
      */
     
-    public void addEducation(final Education newEducation);
-    public void deleteEducation(final int id);
-    public void updateEducationName(final String newName, final int id);
-    public Education findEducation(final int id);
+    public void addEducation(Education newEducation);
+    public void deleteEducation(int id);
+    public void updateEducationName(String newName, int id);
+    public Education findEducation(int id);
     public List<Education> listAllEducations();
     
     /**
@@ -32,8 +32,8 @@ public interface EducationDAO {
      * @param educationID
      * @param studentIdsToAdd 
      */
-    public void addStudentsToEducation(final int educationID, final Set<Integer> studentIdsToAdd);
-    public void removeStudentsFromEducation(final int educationID, final Set<Integer> studentIdsToRemove);
+    public void addStudentsToEducation(int educationID, Set<Integer> studentIdsToAdd);
+    public void removeStudentsFromEducation(int educationID, Set<Integer> studentIdsToRemove);
   
     /**
      * ADD and DELETE from the list of Courses 
@@ -42,7 +42,7 @@ public interface EducationDAO {
      * @param educationID
      * @param courseIDsToAdd 
      */
-    public void addCoursesToEducation(final int educationID, final Set<Integer> courseIDsToAdd);
-    public void removeCoursesFromEducation(final int educationID, final Set<Integer> courseIDsToRemove);
+    public void addCoursesToEducation(int educationID, Set<Integer> courseIDsToAdd);
+    public void removeCoursesFromEducation(int educationID, Set<Integer> courseIDsToRemove);
     
 }

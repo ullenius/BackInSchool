@@ -8,7 +8,6 @@ package database.dao;
 import database.Person;
 import database.Student;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *
@@ -16,18 +15,17 @@ import javax.persistence.Query;
  */
 public interface StudentDAO {
     
-      // döpa om till addStudent?
+     @Deprecated
+    public void addStudent(Student studentToAdd); // use addPerson instead
     public void addPerson(final Person personToAdd);
     public void updateStudentName(final String newName, final int id);
     public void deleteStudent(final int id);
 
-    public <T extends Person> Person findById(final int id, T person);
     public Student findStudentById(final int id);
 
     public List<Student> listStudentsInCourse(final int courseID);
     public List<Student> listAllStudents();
     public List<Student> listLonelyStudents();
     
-    @Deprecated
-    public void addStudent(Student studentToAdd); // use addPerson instead
+   
 }

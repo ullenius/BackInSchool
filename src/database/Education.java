@@ -1,9 +1,9 @@
 package database;
 
 
+import database.dao.Persistable;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
 @Entity
-public class Education {
+public class Education implements Persistable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

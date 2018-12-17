@@ -1,6 +1,7 @@
 package database;
 
 
+import database.dao.Persistable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +19,7 @@ import javax.persistence.ManyToOne;
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
 @Entity
-public class Course {
+public class Course implements Persistable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
