@@ -13,7 +13,10 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
-import implementation.DaoImplementation;
+import implementation.CourseDAOImplementation;
+import implementation.EducationDAOImplementation;
+import implementation.StudentDAOImplementation;
+import implementation.TeacherDAOImplementation;
 import util.InputHelper;
 
 /**
@@ -31,7 +34,11 @@ public final class AddMenu {
     private static final String COURSE;
     private static final String EXIT;
     
-    private static final DaoImplementation schoolDB;
+    private static final CourseDAOImplementation courseDAO;
+    private static final EducationDAOImplementation educationDAO;
+    private static final TeacherDAOImplementation teacherDAO;
+    private static final StudentDAOImplementation studentDAO;
+    
     private static final InputHelper feedMe;
     
     static {
@@ -41,7 +48,12 @@ public final class AddMenu {
         COURSE = "Add course";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
+        
+        // initialise the DAOs
+        courseDAO = CourseDAOImplementation.getInstance();
+        educationDAO = EducationDAOImplementation.getInstance();
+        teacherDAO = TeacherDAOImplementation.getInstance();
+        studentDAO = StudentDAOImplementation.getInstance();
     }
     
     public static void printMenu() {
@@ -67,22 +79,22 @@ public final class AddMenu {
                 
                 case 1:
                     newStudent = makeStudent();
-                    schoolDB.addPerson(newStudent);
+                    studentDAO.addPerson(newStudent);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     newTeacher = makeTeacher();
-                    schoolDB.addPerson(newTeacher);
+                    teacherDAO.addPerson(newTeacher);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     newCourse = makeCourse();
-                    schoolDB.addCourse(newCourse);
+                    courseDAO.addCourse(newCourse);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     newEducation = makeEducation();
-                    schoolDB.addEducation(newEducation);
+                    educationDAO.addEducation(newEducation);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 5:
@@ -134,7 +146,7 @@ public final class AddMenu {
          * Include option to have no supervisor set? I.e. NULL
          */
         
-        Teacher supervisor = schoolDB.findTeacher(supervisorID);
+        Teacher supervisor = teacherDAO.findTeacher(supervisorID);
         newCourse.setSupervisor(supervisor);
         System.out.println("New COURSE object successfully created");
         

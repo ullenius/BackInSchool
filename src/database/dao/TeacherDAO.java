@@ -15,11 +15,13 @@ import java.util.List;
  */
 public interface TeacherDAO {
     
-    public void deleteTeacher(final int id);
-    public void addPerson(final Person personToAdd);
-    public Teacher findTeacher(final int id);
+    public void deleteTeacher(int id);
+    public void addPerson(Person personToAdd);
+    @Deprecated
+    public void addTeacher(Teacher teacherToAdd);
+    public Teacher findTeacher(int id);
     public List<Teacher> listAllTeachers();
     public List<Teacher> listLonelyTeachers();
-    public void updateTeacherName(final String newName, final int id); 
+    public void updateTeacherName(String newName, int id); 
      
 }

@@ -9,7 +9,10 @@
 */
 package menu;
 
-import implementation.DaoImplementation;
+import implementation.CourseDAOImplementation;
+import implementation.EducationDAOImplementation;
+import implementation.StudentDAOImplementation;
+import implementation.TeacherDAOImplementation;
 import util.InputHelper;
 
 /**
@@ -25,7 +28,10 @@ public final class BonusMenu {
     private static final String UNSUPERVISED_COURSES;
     private static final String EXIT;
     
-    private static final DaoImplementation schoolDB;
+    private static final CourseDAOImplementation courseDAO;
+    private static final EducationDAOImplementation educationDAO;
+    private static final TeacherDAOImplementation teacherDAO;
+    private static final StudentDAOImplementation studentDAO;
     private static final InputHelper feedMe;
     
     static {
@@ -36,7 +42,12 @@ public final class BonusMenu {
         LONELY_TEACHERS = "List TEACHERS who do not SUPERVISE any COURSES";
         EXIT = "Exit menu";
         feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
+        
+         // initialise the DAOs
+        courseDAO = CourseDAOImplementation.getInstance();
+        educationDAO = EducationDAOImplementation.getInstance();
+        teacherDAO = TeacherDAOImplementation.getInstance();
+        studentDAO = StudentDAOImplementation.getInstance();
     }
     
     private BonusMenu() { // exits only to prevent instantiation

@@ -1,7 +1,10 @@
 /*
-
+*
+* This class is deprecated by its various implementations classes
+* EducationDAOImplementation, TeacherDAOImplemenetation etc
+*
 */
-package implementation;
+package implementation.deprecated;
 
 import database.Course;
 import database.Education;
@@ -20,6 +23,7 @@ import javax.persistence.Query;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
+@Deprecated
 public class DaoImplementation {
     
     private static DaoImplementation instance;
@@ -29,6 +33,7 @@ public class DaoImplementation {
     static {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         instance = null; //singleton stuff. See getInstance()
+        em = emf.createEntityManager();
     }
     
     private DaoImplementation() {
@@ -46,7 +51,6 @@ public class DaoImplementation {
     // Deprecated by addPerson method
     public void addTeacher(Teacher teacherToAdd) {
 
-        em = emf.createEntityManager();
         em.getTransaction().begin();
 
         em.persist(teacherToAdd);
@@ -56,7 +60,6 @@ public class DaoImplementation {
     
     public void deleteTeacher(final int id) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         // BEHÖVER KOD SOM ÄNDRAR ALLA ENTRIES
@@ -78,7 +81,6 @@ public class DaoImplementation {
     
     public void deleteStudent(final int id) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         // deletes the students from the Educations that they are tied to
@@ -96,7 +98,6 @@ public class DaoImplementation {
     
     public void addPerson(final Person personToAdd) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         em.persist(personToAdd);
@@ -107,7 +108,6 @@ public class DaoImplementation {
     
     public void addEducation(final Education newEducation) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         em.persist(newEducation);
@@ -117,7 +117,6 @@ public class DaoImplementation {
     
     public void deleteEducation(final int id) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery("DELETE FROM EDUCATION WHERE ID = ?target;");
@@ -130,7 +129,6 @@ public class DaoImplementation {
     
     public void addCourse(final Course newCourse) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         em.persist(newCourse);
@@ -141,10 +139,7 @@ public class DaoImplementation {
     public void deleteCourse(final int id) {
         
         // kommer detta att fucka sig?
-        
-        em = emf.createEntityManager();
         em.getTransaction().begin();
-        
         
         // Cleans up the @ManyToMany relationship with Courses in Education
         Query cleanUpEducationCourseLinkedTable = em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE courseGroup_ID = ?target;");
@@ -168,7 +163,6 @@ public class DaoImplementation {
      * @param customQuery 
      */
     private boolean customQuery(final String customQuery) {
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(customQuery);
@@ -191,20 +185,14 @@ public class DaoImplementation {
      */
     public <T extends Person> Person findById(final int id, T person) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
-        
         Person result = em.find(person.getClass(), id);
-        
         return result;
     }
     
     public Student findStudentById(final int id) {
-        em = emf.createEntityManager();
         em.getTransaction().begin();
-        
         Student foundStudent = em.find(Student.class, id);
-        
         return foundStudent;
     }
     
@@ -212,7 +200,6 @@ public class DaoImplementation {
     // DEPRECATED by addPerson()
     public void addStudent(Student studentToAdd) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         em.persist(studentToAdd);
@@ -222,7 +209,6 @@ public class DaoImplementation {
     
     public Course findCourse(final int id) {
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Course result = em.find(Course.class, id);
@@ -233,7 +219,6 @@ public class DaoImplementation {
     }
     
     public Education findEducation(final int id) {
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Education result = em.find(Education.class, id);
@@ -252,7 +237,6 @@ public class DaoImplementation {
                 + "GROUP BY STUDENT.NAME "
                 + "ORDER BY STUDENT.NAME DESC;";
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Student.class);
@@ -265,7 +249,6 @@ public class DaoImplementation {
     }
     
     public Teacher findTeacher(final int id) {
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Teacher result = em.find(Teacher.class, id);
@@ -279,7 +262,6 @@ public class DaoImplementation {
         
         final String sql = "SELECT id,name FROM STUDENT ORDER BY NAME;";
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Student.class);
@@ -292,7 +274,6 @@ public class DaoImplementation {
     public List<Teacher> listAllTeachers() {
         final String sql = "SELECT id,name FROM TEACHER ORDER BY name;";
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Teacher.class);
@@ -306,7 +287,6 @@ public class DaoImplementation {
         final String sql = "SELECT id,name,supervisor_id "
                 + "FROM COURSE ORDER BY name;";
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Course.class);
@@ -319,7 +299,6 @@ public class DaoImplementation {
     public List<Education> listAllEducations() {
         final String sql = "SELECT id,name FROM EDUCATION ORDER BY name;";
         
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Education.class);
@@ -332,7 +311,6 @@ public class DaoImplementation {
     public List<Course> listUnsupervisedCourses() {
         
         final String sql = "SELECT ID,NAME FROM COURSE WHERE SUPERVISOR_ID IS NULL";
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Course.class);
@@ -351,7 +329,6 @@ public class DaoImplementation {
                 "LEFT OUTER JOIN EDUCATION_STUDENT " +
                 "ON STUDENT.ID = EDUCATION_STUDENT.studentgroup_id " +
                 "WHERE education_id IS NULL;";
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Student.class);
@@ -371,7 +348,6 @@ public class DaoImplementation {
                 "LEFT OUTER JOIN COURSE " +
                 "ON TEACHER.ID = COURSE.SUPERVISOR_ID " +
                 "WHERE SUPERVISOR_ID IS NULL;";
-        em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(sql,Teacher.class);
@@ -404,7 +380,6 @@ public class DaoImplementation {
         sql = sql.concat(newName+"\" WHERE ID = " + id);
         
         customQuery(sql);
-        
     }
     
     /**
@@ -432,7 +407,6 @@ public class DaoImplementation {
         sql = sql.concat(newName+"\" WHERE ID = " + id);
         
         customQuery(sql);
-        
     }
     
     /**
@@ -468,7 +442,6 @@ public class DaoImplementation {
      */
     
     public void removeStudentsFromEducation(final int educationID, final Set<Integer> studentIdsToRemove) {
-        
         
          StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_STUDENT " +
         "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
@@ -514,5 +487,3 @@ public class DaoImplementation {
         customQuery(sql.toString()); // executes the query
     }
 }
-
-
