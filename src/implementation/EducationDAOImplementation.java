@@ -66,11 +66,10 @@ public class EducationDAOImplementation implements EducationDAO {
         
         em.getTransaction().begin();
         
-        Query myQuery = em.createNativeQuery("DELETE FROM EDUCATION WHERE ID = ?target;");
-        myQuery.setParameter("target", id);
-        
-        myQuery.executeUpdate();
-        
+        Education target = em.find(Education.class, id);
+        if (target != null)
+            em.remove(target);
+
         em.getTransaction().commit();
     }
 
