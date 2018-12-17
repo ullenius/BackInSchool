@@ -7,32 +7,22 @@
 */
 package menu;
 
-import implementation.DaoImplementation;
-import util.InputHelper;
-
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class DeleteMenu {
+public final class DeleteMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;
     private static final String EDUCATION;
     private static final String COURSE;
-    private static final String EXIT;
-    
-    private static final DaoImplementation schoolDB;
-    private static final InputHelper feedMe;
     
     static {
         STUDENT = "Delete student";
         TEACHER = "Delete teacher";
         EDUCATION = "Delete education";
         COURSE = "Delete course";
-        EXIT = "Exit menu";
-        feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
     }
     
     private DeleteMenu() { // exists only to prevent instantiation
@@ -60,28 +50,28 @@ public final class DeleteMenu {
                 case 1:
                     System.out.println(STUDENT);
                     targetID = feedMe.getInt("Enter STUDENT id to delete: ");
-                    schoolDB.deleteStudent(targetID);
+                    studentDAO.deleteStudent(targetID);
                     System.out.println("Deleting STUDENT" + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     System.out.println(TEACHER);
                     targetID = feedMe.getInt("Enter TEACHER id to delete: ");
-                    schoolDB.deleteTeacher(targetID);
+                    teacherDAO.deleteTeacher(targetID);
                     System.out.println("Deleting TEACHER " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     System.out.println(COURSE);
                     targetID = feedMe.getInt("Enter COURSE id to delete: ");
-                    schoolDB.deleteCourse(targetID);
+                    courseDAO.deleteCourse(targetID);
                     System.out.println("Deleting COURSE " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     System.out.println(EDUCATION);
                     targetID = feedMe.getInt("Enter EDUCATION id to delete: ");
-                    schoolDB.deleteEducation(targetID);
+                    educationDAO.deleteEducation(targetID);
                     System.out.println("Deleting EDUCATION " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;

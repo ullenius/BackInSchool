@@ -8,6 +8,7 @@ package database.dao;
 import database.Person;
 import database.Student;
 import java.util.List;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +26,7 @@ public interface StudentDAO {
 
     public List<Student> listStudentsInCourse(final int courseID);
     public List<Student> listAllStudents();
+    public List<Student> listLonelyStudents();
     
     @Deprecated
     public void addStudent(Student studentToAdd); // use addPerson instead

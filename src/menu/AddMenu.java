@@ -13,17 +13,12 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
-import implementation.CourseDAOImplementation;
-import implementation.EducationDAOImplementation;
-import implementation.StudentDAOImplementation;
-import implementation.TeacherDAOImplementation;
-import util.InputHelper;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class AddMenu {
+public final class AddMenu extends AbstractMenu {
     
     private AddMenu() { // exists only to prevent instantiation
     }
@@ -32,28 +27,12 @@ public final class AddMenu {
     private static final String TEACHER;
     private static final String EDUCATION;
     private static final String COURSE;
-    private static final String EXIT;
-    
-    private static final CourseDAOImplementation courseDAO;
-    private static final EducationDAOImplementation educationDAO;
-    private static final TeacherDAOImplementation teacherDAO;
-    private static final StudentDAOImplementation studentDAO;
-    
-    private static final InputHelper feedMe;
     
     static {
         STUDENT = "Add student";
         TEACHER = "Add teacher";
         EDUCATION = "Add education";
         COURSE = "Add course";
-        EXIT = "Exit menu";
-        feedMe = new InputHelper();
-        
-        // initialise the DAOs
-        courseDAO = CourseDAOImplementation.getInstance();
-        educationDAO = EducationDAOImplementation.getInstance();
-        teacherDAO = TeacherDAOImplementation.getInstance();
-        studentDAO = StudentDAOImplementation.getInstance();
     }
     
     public static void printMenu() {

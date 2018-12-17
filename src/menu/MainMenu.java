@@ -4,6 +4,11 @@
  * as well as a SEARCH- and BONUS-submenus
  *
  * ALL methods are static
+ * 
+ * 
+ * This is the only menu-class that DOES NOT subclass
+ * AbstractMenu
+ * 
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  * december 2018
@@ -14,13 +19,9 @@
  */
 package menu;
 
-import database.Student;
-import implementation.DaoImplementation;
-import java.util.List;
-import java.util.Scanner;
 import util.InputHelper;
 
-public final class MainMenu {
+public final class MainMenu { 
     
     private static final String WELCOME_MESSAGE = "Back in School"
             + " - a school management RDBMS."
@@ -117,37 +118,5 @@ public final class MainMenu {
         }
         
     }
-    
-    @Deprecated
-    public static void main(String[] args) {
-        
-        statistics();
-    }
-    
-    // Demo-code solely for testing functionality
-    
-    @Deprecated
-    public static void statistics() {
-        
-        /**
-         *
-         * This method was used for testing purposes
-         */
-        
-        Scanner sc = new Scanner(System.in);
-        
-        System.out.println("1. List students in course");
-        System.out.println("Please enter course id");
-        
-        int choice = sc.nextInt();
-        
-        // singleton :)
-        DaoImplementation schoolDB = DaoImplementation.getInstance();
-        
-        List<Student> results = schoolDB.listStudentsInCourse(choice);
-        
-        results.forEach(System.out::println);
-        
-    }
-    
+
 }

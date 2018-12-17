@@ -22,11 +22,12 @@ import util.InputHelper;
 
 /**
  *
- * This is whole class is solely meant for Testing stuff
+ * This is whole class is solely meant for TESTING STUFF
  * 
  * 
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
+@Deprecated
 public final class Demo {
     
     private Demo() {
@@ -52,9 +53,9 @@ public final class Demo {
         
         
         
-        DaoImplementation schoolDB = DaoImplementation.getInstance();
+      //  DaoImplementation schoolDB = DaoImplementation.getInstance();
         
-        schoolDB.listStudentsInCourse(4);
+     //   schoolDB.listStudentsInCourse(4);
         
         
 //        Course myCourse = schoolDB.findCourse(4);

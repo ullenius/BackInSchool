@@ -11,32 +11,23 @@ import database.Course;
 import database.Education;
 import database.Student;
 import database.Teacher;
-import implementation.DaoImplementation;
-import util.InputHelper;
 
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class SearchMenu {
+public final class SearchMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;
     private static final String EDUCATION;
     private static final String COURSE;
-    private static final String EXIT;
-    
-    private static final DaoImplementation schoolDB;
-    private static final InputHelper feedMe;
     
     static {
         STUDENT = "Search for student";
         TEACHER = "Search for teacher";
         EDUCATION = "Sarch for education";
         COURSE = "Search for course";
-        EXIT = "Exit menu";
-        feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
     }
     
     private SearchMenu() { // exists only to defeat instantiation
@@ -93,7 +84,7 @@ public final class SearchMenu {
     
     private static String findStudentById(int id) {
         
-        Student foundStudent = schoolDB.findStudentById(id);
+        Student foundStudent = studentDAO.findStudentById(id);
         
         /**
          * Default return message if search yields 0 results
@@ -109,7 +100,7 @@ public final class SearchMenu {
     
     private static String findTeacherById(int id) {
         
-        Teacher foundTeacher = schoolDB.findTeacher(id);
+        Teacher foundTeacher = teacherDAO.findTeacher(id);
         
         /**
          * Default return message if search yields 0 results
@@ -124,7 +115,7 @@ public final class SearchMenu {
     }
     
     private static String findCourseById(int id) {
-        Course foundCourse = schoolDB.findCourse(id);
+        Course foundCourse = courseDAO.findCourse(id);
         
         /**
          * Default return message if search yields 0 results
@@ -140,7 +131,7 @@ public final class SearchMenu {
     }
     
     private static String findEducationById(int id) {
-        Education foundEducation = schoolDB.findEducation(id);
+        Education foundEducation = educationDAO.findEducation(id);
         /**
          * Default return message if search yields 0 results
          */

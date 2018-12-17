@@ -8,7 +8,6 @@ package database.dao;
 import database.Course;
 import database.Student;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *
@@ -16,13 +15,13 @@ import javax.persistence.Query;
  */
 public interface CourseDAO {
     
-    public void addCourse(final Course newCourse);
-    public void deleteCourse(final int id);
-    public void updateCourseName(final String newName, final int id);
-    public void updateSupervisor(final int courseID, final Integer supervisorID);
-    
+    public void addCourse(Course newCourse);
+    public void deleteCourse(int id);
+    public void updateCourseName(String newName, int id);
+    public void updateSupervisor(int courseID, Integer supervisorID);
+    public Course findCourse(int id);
     
     public List<Course> listAllCourses();
-    public List<Student> listStudentsInCourse(final int courseID);
+    public List<Student> listStudentsInCourse(int courseID);
     public List<Course> listUnsupervisedCourses();
 }

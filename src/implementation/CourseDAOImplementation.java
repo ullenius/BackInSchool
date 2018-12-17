@@ -166,5 +166,16 @@ public class CourseDAOImplementation implements CourseDAO {
         return (result > 0);
     }
     
+     public Course findCourse(final int id) {
+        
+        em.getTransaction().begin();
+        
+        Course result = em.find(Course.class, id);
+        
+        em.getTransaction().commit();
+        
+        return result;
+    }
+    
     
 }

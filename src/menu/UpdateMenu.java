@@ -7,16 +7,13 @@
 */
 package menu;
 
-import implementation.DaoImplementation;
 import java.util.HashSet;
 import java.util.Set;
-import util.InputHelper;
-
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class UpdateMenu {
+public final class UpdateMenu extends AbstractMenu {
     
     private UpdateMenu() { // exists only to defeat instantiation
         throw new AssertionError(); // this should never happen
@@ -32,10 +29,6 @@ public final class UpdateMenu {
     
     private static final String EDUCATION_ADD_COURSES;
     private static final String EDUCATION_REMOVE_COURSES;
-    private static final String EXIT;
-    
-    private static final DaoImplementation schoolDB;
-    private static final InputHelper feedMe;
     
     static {
         STUDENT = "Update student name";
@@ -49,10 +42,6 @@ public final class UpdateMenu {
         EDUCATION_REMOVE_STUDENTS = "DELETE students from education";
         EDUCATION_ADD_COURSES = "ADD courses to education";
         EDUCATION_REMOVE_COURSES = "DELETE courses from education";
-        
-        EXIT = "Exit menu";
-        feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
     }
     
     public static void printMenu() {
@@ -141,7 +130,7 @@ public final class UpdateMenu {
         int targetID = feedMe.getInt("Please enter student id");
         String newName = feedMe.getText("Please enter new name: ");
         System.out.println("Updating name in database for Student " + targetID);
-        schoolDB.updateStudentName(newName, targetID);
+        studentDAO.updateStudentName(newName, targetID);
     }
     
     private static void updateTeacherName() {
@@ -149,7 +138,7 @@ public final class UpdateMenu {
         int targetID = feedMe.getInt("Please enter TEACHER id");
         String newName = feedMe.getText("Please enter new name: ");
         System.out.println("Updating name in database for TEACHER " + targetID);
-        schoolDB.updateTeacherName(newName, targetID);
+        teacherDAO.updateTeacherName(newName, targetID);
     }
     
     private static void updateCourseName() {
@@ -157,14 +146,14 @@ public final class UpdateMenu {
         int targetID = feedMe.getInt("Please enter COURSE id");
         String newName = feedMe.getText("Please enter new name: ");
         System.out.println("Updating name in database for COURSE " + targetID);
-        schoolDB.updateCourseName(newName, targetID);
+        courseDAO.updateCourseName(newName, targetID);
     }
     
     private static void updateEducationName() {
         int targetID = feedMe.getInt("Please enter EDUCATION id");
         String newName = feedMe.getText("Please enter new name: ");
         System.out.println("Updating name in database for EDUCATION " + targetID);
-        schoolDB.updateEducationName(newName, targetID);
+        educationDAO.updateEducationName(newName, targetID);
         
     }
     
@@ -175,7 +164,7 @@ public final class UpdateMenu {
                 + "to set it to NULL");
         if (supervisorID.intValue() == -1)
             supervisorID = null;
-        schoolDB.updateSupervisor(courseID, supervisorID);
+        courseDAO.updateSupervisor(courseID, supervisorID);
     }
     
     private static void addStudentsToEducation() {
@@ -187,7 +176,7 @@ public final class UpdateMenu {
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        schoolDB.addStudentsToEducation(educationID, studentsToAdd);
+        educationDAO.addStudentsToEducation(educationID, studentsToAdd);
         
             System.out.println("Successfully added " + studentsToAdd.size() 
                   + " students to education");
@@ -202,18 +191,17 @@ public final class UpdateMenu {
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        schoolDB.removeStudentsFromEducation(educationID, studentsToRemove);
+        educationDAO.removeStudentsFromEducation(educationID, studentsToRemove);
           System.out.println("Successfully removed " + studentsToRemove.size() 
                   + " students to education");
     }
     /**
      *
-     * This is an interactive method for user I/O
-     *
+     * This is a helper method used for interactive
+     * user I/O. 
+     * 
      * Takes input from the user and puts it in an
      * int and a Set<Integer>
-     *
-     * This is a helper method.
      *
      * Design pattern: DRY - don't repeat yourself
      */
@@ -240,7 +228,7 @@ public final class UpdateMenu {
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        schoolDB.addCoursesToEducation(educationID, coursesToAdd);
+        educationDAO.addCoursesToEducation(educationID, coursesToAdd);
     }
     
     private static void removeCoursesFromEducation() {
@@ -251,7 +239,7 @@ public final class UpdateMenu {
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        schoolDB.removeCoursesFromEducation(educationID, coursesToRemove);
+        educationDAO.removeCoursesFromEducation(educationID, coursesToRemove);
     }
     
     

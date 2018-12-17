@@ -12,32 +12,22 @@
 */
 package menu;
 
-import implementation.DaoImplementation;
-import util.InputHelper;
-
 /**
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class ListAllMenu {
+public final class ListAllMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;
     private static final String EDUCATION;
     private static final String COURSE;
-    private static final String EXIT;
-    
-    private static final DaoImplementation schoolDB;
-    private static final InputHelper feedMe;
     
     static {
         STUDENT = "Display all students";
         TEACHER = "Display all teachers";
         EDUCATION = "Display all educations";
         COURSE = "Display all courses";
-        EXIT = "Exit menu";
-        feedMe = new InputHelper();
-        schoolDB = DaoImplementation.getInstance();
     }
     
     private ListAllMenu() { // exists only to defeat instantiation
@@ -62,19 +52,19 @@ public final class ListAllMenu {
                 
                 case 1:
                     System.out.println("Displaying all STUDENTS:");
-                    schoolDB.listAllStudents().forEach(System.out::println);
+                    studentDAO.listAllStudents().forEach(System.out::println);
                     break;
                 case 2:
                     System.out.println("Displaying all TEACHERS:");
-                    schoolDB.listAllTeachers().forEach(System.out::println);
+                    teacherDAO.listAllTeachers().forEach(System.out::println);
                     break;
                 case 3:
                     System.out.println("Displaying all COURSES:");
-                    schoolDB.listAllCourses().forEach(System.out::println);
+                    courseDAO.listAllCourses().forEach(System.out::println);
                     break;
                 case 4:
                     System.out.println("Displaying all EDUCATIONS:");
-                    schoolDB.listAllEducations().forEach(System.out::println);
+                    educationDAO.listAllEducations().forEach(System.out::println);
                     break;
                 case 5:
                     System.out.println("Exiting menu");

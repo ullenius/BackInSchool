@@ -134,6 +134,37 @@ public class StudentDAOImplementation implements StudentDAO {
         em.getTransaction().commit();
         return (results);
     }
+    /**
+     * Lists all STUDENTS *WITHOUT* ties to any Education
+     * 
+     * The SQL-query is quite complicated due to the EclipseLink's implementation
+     * of the JPA. It creates a linked table by default which is strictly not
+     * necessary for the OneToMany-relationship between Education and Student
+     * in the database.
+     * 
+     * The Students themselves don't have any knowledge of whether or not
+     * they have a relationship to any other database table. It is a "naive"
+     * entity in that sense. But since RDBMS are by nature uni-directional
+     * we can simply perform a JOIN-operation to solve the problem at hand.
+     * 
+     */
+    public List<Student> listLonelyStudents() {
+        
+        final String sql = "SELECT STUDENT.ID,STUDENT.NAME " +
+                "FROM STUDENT " +
+                "LEFT OUTER JOIN EDUCATION_STUDENT " +
+                "ON STUDENT.ID = EDUCATION_STUDENT.studentgroup_id " +
+                "WHERE education_id IS NULL;";
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Student.class);
+        List<Student> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+    
+    
     
     @Override
     @Deprecated
