@@ -8,6 +8,10 @@
 */
 package menu;
 
+import database.dao.CourseDAO;
+import database.dao.EducationDAO;
+import database.dao.StudentDAO;
+import database.dao.TeacherDAO;
 import implementation.CourseDAOImplementation;
 import implementation.EducationDAOImplementation;
 import implementation.StudentDAOImplementation;
@@ -20,13 +24,12 @@ import util.InputHelper;
  */
 abstract class AbstractMenu {
     
-    static final CourseDAOImplementation courseDAO;
-    static final EducationDAOImplementation educationDAO;
-    static final TeacherDAOImplementation teacherDAO;
-    static final StudentDAOImplementation studentDAO;
+    static final CourseDAO courseDAO;
+    static final EducationDAO educationDAO;
+    static final TeacherDAO teacherDAO;
+    static final StudentDAO studentDAO;
     
     static final String EXIT;
-    
     static final InputHelper feedMe;
     
     static {
@@ -39,6 +42,5 @@ abstract class AbstractMenu {
         teacherDAO = TeacherDAOImplementation.getInstance();
         studentDAO = StudentDAOImplementation.getInstance();
     }
-    
     
 }

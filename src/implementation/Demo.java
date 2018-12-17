@@ -36,10 +36,6 @@ public final class Demo {
     public static void main(String[] args) {
         
         MainMenu.printMenu();
-        //BonusMenu.printMenu();
-        //AddMenu.printMenu();
-        
-    //   ListAllMenu.printMenu();
         
 //        List<Integer> numbers = Arrays.asList(10,15,20,30,40);
 //        Set<Integer> studentID = new HashSet<>();
