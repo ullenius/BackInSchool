@@ -18,7 +18,7 @@ import javax.persistence.Query;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-abstract class AbstractImplementation {
+public abstract class AbstractImplementation {
     
     static final EntityManagerFactory emf;
     static final EntityManager em;
@@ -103,7 +103,7 @@ abstract class AbstractImplementation {
      * Used for cleanup. Cannot be overriden
      * in subclasses
      */
-    final static void closeEverything() {
+    public final void closeEverything() {
     
     if (em.isOpen())
         em.close();

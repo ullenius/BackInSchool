@@ -5,11 +5,6 @@
  *
  * ALL methods are static
  * 
- * 
- * This is the only menu-class that DOES NOT subclass
- * AbstractMenu
- * 
- *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  * december 2018
  * 
@@ -19,9 +14,11 @@
  */
 package menu;
 
+import implementation.AbstractImplementation;
+import implementation.CourseDAOImplementation;
 import util.InputHelper;
 
-public final class MainMenu { 
+public final class MainMenu extends AbstractMenu { 
     
     private static final String WELCOME_MESSAGE = "Back in School"
             + " - a school management RDBMS."
@@ -33,7 +30,6 @@ public final class MainMenu {
     private static final String DELETE;
     private static final String SEARCH;
     private static final String BONUS;
-    private static final String EXIT;
     private static final String CREDITS;
     private static final String CREDITS_MESSAGE;
     
@@ -48,8 +44,6 @@ public final class MainMenu {
         BONUS ="BONUS functionality";
         CREDITS = "Show CREDITS";
         CREDITS_MESSAGE = "Thanks to:\nLars J\nPuya\nand our supervisor Ms. Bita J.";
-        EXIT = "Exit program";
-        
         feedMe = new InputHelper();
     }
     
@@ -71,7 +65,7 @@ public final class MainMenu {
             System.out.println("5. " + SEARCH);
             System.out.println("6. " + BONUS);
             System.out.println("7. " + CREDITS);
-            System.out.println("8. " + EXIT);
+            System.out.println("8. EXIT PROGRAM");
             
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
@@ -108,7 +102,10 @@ public final class MainMenu {
                     break;
                 case 8:
                     System.out.println(EXIT);
-                    return; // exiting method
+                    // Fulhack
+                    AbstractImplementation ref = (CourseDAOImplementation) courseDAO;
+                    ref.closeEverything();
+                    return; // exiting method (and program)
                 default:
                     System.out.println("Invalid selection");
                     break;
