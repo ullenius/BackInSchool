@@ -7,7 +7,9 @@
 */
 package menu;
 
+import database.dao.CourseNotFoundException;
 import database.dao.EducationNotFoundException;
+import database.dao.TeacherNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 /**
@@ -165,7 +167,12 @@ public final class UpdateMenu extends AbstractMenu {
                 + "to set it to NULL");
         if (supervisorID.intValue() == -1)
             supervisorID = null;
+        try {
         courseDAO.updateSupervisor(courseID, supervisorID);
+        } catch (CourseNotFoundException | TeacherNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to update supervisor!");
+        }
     }
     
     private static void addStudentsToEducation() {

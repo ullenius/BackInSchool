@@ -6,6 +6,7 @@ package implementation;
 import database.dao.CourseNotFoundException;
 import database.Course;
 import database.Student;
+import database.Teacher;
 import database.dao.CourseDAO;
 import database.dao.TeacherNotFoundException;
 import java.util.List;
@@ -86,10 +87,10 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         /** 
          * First lets check if the Course ID exists
          */
-        
         final String courseExists = "SELECT ID FROM COURSE WHERE ID = " + courseID;
-        if (!customQuery(courseExists))
-            throw new CourseNotFoundException("The course does not exist! Can't set supervisor");
+        if (getResultList(Course.class,courseExists).isEmpty())
+            throw new CourseNotFoundException("The course does not exist! "
+                    + "Can't set supervisor");
         
         /**
          * Everything went well. Now lets make sure that the supervisor ID 
@@ -99,7 +100,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
             
             final String teacherExists = "SELECT ID FROM TEACHER WHERE ID = "
                     + supervisorID;
-            if (!customQuery(teacherExists))
+            if (getResultList(Teacher.class,teacherExists).isEmpty())
                 throw new TeacherNotFoundException("The teacher does not exist!");
         }
         
@@ -144,7 +145,6 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         em.getTransaction().commit();
         return (results);
     }
-    
     
     @Override
     public List<Course> listUnsupervisedCourses() {

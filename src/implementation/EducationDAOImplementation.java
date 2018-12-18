@@ -1,6 +1,6 @@
 /*
- * Implementation of the Education DAO (data access object) interface
- */
+* Implementation of the Education DAO (data access object) interface
+*/
 package implementation;
 
 import database.Course;
@@ -43,27 +43,27 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         
         persistStuff(newEducation);
     }
-
+    
     /**
-     * 
+     *
      * JPA handles all the deletions in the linked tables
      * EDUATION_COURSE and EDUCATION_STUDENT. We don't have to
      * do it manually
-     * 
-     * @param id 
+     *
+     * @param id
      */
     @Override
-     public void deleteEducation(final int id) {
+    public void deleteEducation(final int id) {
         
         em.getTransaction().begin();
         
         Education target = em.find(Education.class, id);
         if (target != null)
             em.remove(target);
-
+        
         em.getTransaction().commit();
     }
-
+    
     @Override
     public void updateEducationName(final String newName, final int id) {
         
@@ -72,17 +72,17 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         
         customQuery(sql);
     }
-
+    
     @Override
     public Optional<Education> findEducation(final int id) {
         
         return findEntity(Education.class,id); // generic method in superclass
     }
-
+    
     /**
-     * 
+     *
      * Returns an ordered list of Educations
-     * @return 
+     * @return
      */
     @Override
     public List<Education> listAllEducations() {
@@ -96,37 +96,37 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         em.getTransaction().commit();
         return (results);
     }
-
+    
     /**
-     * 
+     *
      * This method makes ONE SQL-query in order to ADD all entries at once
      * Uses Set for speed
      * Uses StringBuffer to avoid filling up the String-pool with junk Strings
      *
-     * 
+     *
      * It throws EducationNotFoundException and StudentNotFoundException.
      * The latter if ONE of the Students in the Set<Integer> does not exist
-     * 
-     * 
+     *
+     *
      * BUGS: SQL only supports adding 1000 entries at once
-     * 
+     *
      * @param educationID
      * @param studentIdsToAdd
      * @throws EducationNotFoundException
-     * @throws StudentNotFoundException 
+     * @throws StudentNotFoundException
      */
     @Override
-    public void addStudentsToEducation(final int educationID, 
+    public void addStudentsToEducation(final int educationID,
             final Set<Integer> studentIdsToAdd) throws EducationNotFoundException {
         
         // Make sure that the Education ID exists...
         String checkEducation = "SELECT EDUCATION.ID WHERE ID = " + educationID;
-        if (!customQuery(checkEducation)) // rows affected > 0
-        throw new EducationNotFoundException("No education with ID:" 
-                + educationID + " found!");        
-                
+        if (getResultList(Education.class,checkEducation).isEmpty())
+            throw new EducationNotFoundException("No education with ID:"
+                    + educationID + " found!");
+        
         /**
-         * 
+         *
          * Everything went well, now lets try to insert all values at once.
          * Throws exception if something goes wrong
          */
@@ -137,7 +137,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         while (myIterator.hasNext()) {
             sql.append("("+ educationID + ","+myIterator.next()+"),");
         }
-         // removes the last ',' character
+        // removes the last ',' character
         sql.deleteCharAt(sql.length()-1);
         
         try {
@@ -152,39 +152,39 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     }
     
     /**
-     * 
+     *
      * This method makes ONE SQL-query in order to REMOVE all entries at once
      * @param educationID
-     * @param studentIdsToRemove 
+     * @param studentIdsToRemove
      */
     @Override
-    public void removeStudentsFromEducation(final int educationID, 
+    public void removeStudentsFromEducation(final int educationID,
             Set<Integer> studentIdsToRemove) {
         
         StringBuilder sql = new StringBuilder("DELETE FROM EDUCATION_STUDENT " +
-        "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
+                "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
         
         Iterator myIterator = studentIdsToRemove.iterator();
         while (myIterator.hasNext()) {
             sql.append(myIterator.next() + ",");
         }
-
+        
         // replaces the last character ',' with an ending ')'
         sql.setCharAt(sql.length()-1, ')');
         
         customQuery(sql.toString()); // executes the query
     }
-
+    
     /**
-     * 
+     *
      * Please note that the SQL-query varies significantly from
      * the removeCoursesFromEducation-method even though at a glance
      * the methods may look identical.
-     * 
+     *
      * The append loops also varies *significantly*
-     * 
+     *
      * @param educationID
-     * @param courseIDsToAdd 
+     * @param courseIDsToAdd
      */
     @Override
     public void addCoursesToEducation(int educationID, Set<Integer> courseIDsToAdd) {
@@ -196,11 +196,11 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         while (myIterator.hasNext()) {
             sql.append("("+ educationID + ","+myIterator.next()+"),");
         }
-         // removes the last ',' character
+        // removes the last ',' character
         sql.deleteCharAt(sql.length()-1);
         
         try {
-        customQuery(sql.toString()); // executes the Query
+            customQuery(sql.toString()); // executes the Query
         } catch (RuntimeException e) {
             System.out.println("Something fucked up. Doing rollback");
             System.out.println(e.getMessage());
@@ -209,23 +209,23 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         }
         
     }
-
+    
     /**
      * Please note that the SQL-query varies significantly from
      * the AddCoursesToEducation-method even though at a glance
      * the methods may look identical.
-     * 
+     *
      * The append loops also varies *significantly*
-     * 
+     *
      * @param educationID
-     * @param courseIDsToRemove 
+     * @param courseIDsToRemove
      */
     @Override
-    public void removeCoursesFromEducation(final int educationID, 
+    public void removeCoursesFromEducation(final int educationID,
             final Set<Integer> courseIDsToRemove) {
         
         StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_COURSE " +
-        "WHERE Education_ID =" +educationID + " AND courseGroup_ID IN (");
+                "WHERE Education_ID =" +educationID + " AND courseGroup_ID IN (");
         
         Iterator myIterator = courseIDsToRemove.iterator();
         while (myIterator.hasNext()) {
@@ -238,14 +238,14 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     }
     
     /**
-     * 
+     *
      * JPA caching is complete and utter rubbish. Otherwise this would be
      * unneccessary.
-     * 
+     *
      * Thankfully native queries saves the day!
-     * 
+     *
      * @param id
-     * @return 
+     * @return
      */
     @Override
     public List<Course> listCoursesInEducation(int id) {
@@ -265,10 +265,10 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         em.getTransaction().commit();
         return (results);
     }
-
+    
     @Override
     public List<Student> listStudentsInEducation(int id) {
-
+        
         final String sql = "SELECT STUDENT.ID,STUDENT.NAME "
                 + "FROM STUDENT,EDUCATION_STUDENT "
                 + "WHERE STUDENT.ID = EDUCATION_STUDENT.studentgroup_id "

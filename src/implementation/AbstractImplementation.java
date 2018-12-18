@@ -9,6 +9,7 @@
 package implementation;
 
 import database.dao.Persistable;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -51,6 +52,30 @@ public abstract class AbstractImplementation {
         
         return (result > 0);
     }
+
+    
+    /**
+     * 
+     * A generic helper method that performs a custom SQL SELECT statement and
+     * returns a resultlist of type <T extends Persistable>
+     * 
+     * @param <T>
+     * @param entityClass
+     * @param customQuery
+     * @return 
+     */
+    <T extends Persistable> List<T> getResultList(Class<T> entityClass, 
+            final String customQuery) {
+        
+        em.getTransaction().begin();
+        Query myQuery = em.createNativeQuery(customQuery,entityClass);
+  
+        List<T> resultList = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return resultList;
+    }
+    
     /**
      *
      * This generic method is used to persist objects of Entity-class types
