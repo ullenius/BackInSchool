@@ -120,7 +120,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
             final Set<Integer> studentIdsToAdd) throws EducationNotFoundException {
         
         // Make sure that the Education ID exists...
-        String checkEducation = "SELECT EDUCATION.ID WHERE ID = " + educationID;
+        String checkEducation = "SELECT ID,NAME FROM EDUCATION WHERE ID = " + educationID;
         if (getResultList(Education.class,checkEducation).isEmpty())
             throw new EducationNotFoundException("No education with ID:"
                     + educationID + " found!");

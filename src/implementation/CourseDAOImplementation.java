@@ -87,7 +87,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         /** 
          * First lets check if the Course ID exists
          */
-        final String courseExists = "SELECT ID FROM COURSE WHERE ID = " + courseID;
+        final String courseExists = "SELECT ID,NAME,SUPERVISOR_ID FROM COURSE WHERE ID = " + courseID;
         if (getResultList(Course.class,courseExists).isEmpty())
             throw new CourseNotFoundException("The course does not exist! "
                     + "Can't set supervisor");
