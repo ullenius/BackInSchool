@@ -118,10 +118,10 @@ public abstract class AbstractImplementation {
      */
     public final void closeEverything() {
         
-        if (em.isOpen())
+        if (em != null && em.isOpen())
             em.close();
         
-        if (emf.isOpen())
+        if (emf != null && emf.isOpen())
             emf.close();
     }
     
