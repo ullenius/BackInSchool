@@ -48,7 +48,7 @@ public final class MainMenu {
         BONUS ="BONUS functionality";
         CREDITS = "Show CREDITS";
         CREDITS_MESSAGE = "Thanks to:\nLars J\nPuya\nand our supervisor Ms. Bita J.";
-        EXIT = "Exit menu";
+        EXIT = "Exit program";
         
         feedMe = new InputHelper();
     }
@@ -57,10 +57,9 @@ public final class MainMenu {
     }
     
     public static void printMenu() {
+        
         int userChoice = -1;
-        
         System.out.println(WELCOME_MESSAGE);
-        
         
         while (true) {
             System.out.println("MAIN MENU");
@@ -109,7 +108,6 @@ public final class MainMenu {
                     break;
                 case 8:
                     System.out.println(EXIT);
-                    System.out.println("Exiting menu");
                     return; // exiting method
                 default:
                     System.out.println("Invalid selection");
@@ -118,5 +116,5 @@ public final class MainMenu {
         }
         
     }
-
+        
 }

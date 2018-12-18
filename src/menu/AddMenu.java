@@ -59,21 +59,25 @@ public final class AddMenu extends AbstractMenu {
                 case 1:
                     newStudent = makeStudent();
                     studentDAO.addPerson(newStudent);
+                    newStudent = null; // eligible for garbage collection
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     newTeacher = makeTeacher();
                     teacherDAO.addPerson(newTeacher);
+                    newTeacher = null;
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:
                     newCourse = makeCourse();
                     courseDAO.addCourse(newCourse);
+                    newCourse = null;
                     feedMe.getText("Press enter to continue");
                     break;
                 case 4:
                     newEducation = makeEducation();
                     educationDAO.addEducation(newEducation);
+                    newEducation = null;
                     feedMe.getText("Press enter to continue");
                     break;
                 case 5:
@@ -124,7 +128,6 @@ public final class AddMenu extends AbstractMenu {
          * 
          * Include option to have no supervisor set? I.e. NULL
          */
-        
         Teacher supervisor = teacherDAO.findTeacher(supervisorID);
         newCourse.setSupervisor(supervisor);
         System.out.println("New COURSE object successfully created");
