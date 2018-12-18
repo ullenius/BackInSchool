@@ -40,16 +40,16 @@ public final class SearchMenu extends AbstractMenu {
         int targetID = -1;
         
         while (true) {
-        System.out.println("SEARCH BY ID SUBMENU");
-        System.out.println("Searching for entries in the database");
-        
-        System.out.println("1. " + STUDENT);
-        System.out.println("2. " + TEACHER);
-        System.out.println("3. " + COURSE);
-        System.out.println("4. " + EDUCATION);
-        System.out.println("5. " + EXIT);
-        
-        
+            System.out.println("SEARCH BY ID SUBMENU");
+            System.out.println("Searching for entries in the database");
+            
+            System.out.println("1. " + STUDENT);
+            System.out.println("2. " + TEACHER);
+            System.out.println("3. " + COURSE);
+            System.out.println("4. " + EDUCATION);
+            System.out.println("5. " + EXIT);
+            
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -82,13 +82,11 @@ public final class SearchMenu extends AbstractMenu {
             }
         }
     }
-    
-    
     /**
-     * 
+     *
      * Göra om detta till en generisk metod? Om jag har tid/orkar
      * @param id
-     * @return 
+     * @return
      */
     private static String findStudentById(int id) {
         
@@ -101,7 +99,7 @@ public final class SearchMenu extends AbstractMenu {
             result = "Found no matching entry for " + id + " in database";
         }
         
-       return result;
+        return result;
     }
     
     private static String findTeacherById(int id) {
@@ -115,23 +113,20 @@ public final class SearchMenu extends AbstractMenu {
             result = "Found no matching entry for " + id + " in database";
         }
         
-       return result;
+        return result;
     }
     
     private static String findCourseById(int id) {
-        Course foundCourse = courseDAO.findCourse(id);
+        Optional<Course> foundCourse = courseDAO.findCourse(id);
+        String result = null;
         
-        /**
-         * Default return message if search yields 0 results
-         */
-        String result = "Found no matching entry for " + id +
-                " in database";
-        
-        if (foundCourse != null)
-            result = "Found matching COURSE: " + foundCourse.toString();
+        if (foundCourse.isPresent()) {
+            result = "Found matching COURSE: " + foundCourse.get().toString();
+        } else {
+            result = "Found no matching entry for " + id + " in database";
+        }
         
         return result;
-        
     }
     
     private static String findEducationById(int id) {
@@ -145,7 +140,7 @@ public final class SearchMenu extends AbstractMenu {
             result = "Found no matching entry for " + id + " in database";
         }
         
-       return result;
+        return result;
     }
-        
+    
 }

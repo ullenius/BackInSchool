@@ -3,10 +3,13 @@
 */
 package implementation;
 
+import database.dao.CourseNotFoundException;
 import database.Course;
 import database.Student;
 import database.dao.CourseDAO;
+import database.dao.TeacherNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Query;
 
 /**
@@ -77,8 +80,30 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
      * @param supervisorID
      */
     @Override
-    public void updateSupervisor(final int courseID, final Integer supervisorID) {
+    public void updateSupervisor(final int courseID, final Integer supervisorID) 
+            throws CourseNotFoundException, TeacherNotFoundException {
         
+        /** 
+         * First lets check if the Course ID exists
+         */
+        
+        final String courseExists = "SELECT ID FROM COURSE WHERE ID = " + courseID;
+        if (!customQuery(courseExists))
+            throw new CourseNotFoundException("The course does not exist! Can't set supervisor");
+        
+        /**
+         * Everything went well. Now lets make sure that the supervisor ID 
+         * (Teacher) exists as well
+         */
+        if (supervisorID != null) {
+            
+            final String teacherExists = "SELECT ID FROM TEACHER WHERE ID = "
+                    + supervisorID;
+            if (!customQuery(teacherExists))
+                throw new TeacherNotFoundException("The teacher does not exist!");
+        }
+        
+        // Everything went well, lets finally do the query
         String sql = "UPDATE COURSE SET SUPERVISOR_ID=" + supervisorID;
         sql = sql.concat(" WHERE ID = " + courseID);
         
@@ -134,8 +159,8 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         return (results);
     }
     @Override
-     public Course findCourse(final int id) {
-       return findById(Course.class,id);
+     public Optional<Course> findCourse(final int id) {
+         return findEntity(Course.class,id);
     }
     
     
