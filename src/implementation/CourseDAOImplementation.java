@@ -44,17 +44,15 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
     @Override
     public void deleteCourse(final int id) {
         em.getTransaction().begin();
-        
         // Cleans up the @ManyToMany relationship with Courses in Education
         Query cleanUpEducationCourseLinkedTable =
                 em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE "
                         + "courseGroup_ID = " + id);
         cleanUpEducationCourseLinkedTable.executeUpdate();
-        
+
         Query myQuery =
                 em.createNativeQuery("DELETE FROM COURSE WHERE ID = " + id);
         myQuery.executeUpdate();
-        
         em.getTransaction().commit();
     }
     
@@ -65,7 +63,6 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         sql = sql.concat(newName+"\" WHERE ID = " + id);
         customQuery(sql);
     }
-    
     /**
      * 
      * Uses Integer so that it can be set to NULL since supervisor_ID
@@ -107,13 +104,11 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
          * an StudentNotFoundException
          */
         if (supervisorID != null) {
-            
             final String teacherExists = "SELECT ID FROM TEACHER WHERE ID = "
                     + supervisorID;
             if (getResultList(Teacher.class,teacherExists).isEmpty())
                 throw new TeacherNotFoundException("The teacher does not exist!");
         }
-        
         // Everything went well, lets finally do the query
         String sql = "UPDATE COURSE SET SUPERVISOR_ID=" + supervisorID;
         sql = sql.concat(" WHERE ID = " + courseID);
@@ -144,16 +139,10 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         final String sql = "SELECT STUDENT.ID, STUDENT.NAME "
                 + "FROM STUDENT,EDUCATION_COURSE,COURSE "
                 + "WHERE COURSE.ID = EDUCATION_COURSE.courseGroup_ID "
-                + "AND COURSE.ID = ?target "
-                + "GROUP BY STUDENT.NAME "
+                + "AND COURSE.ID = " + courseID
+                + " GROUP BY STUDENT.NAME "
                 + "ORDER BY STUDENT.NAME DESC;";
-        
-        em.getTransaction().begin();
-        Query myQuery = em.createNativeQuery(sql,Student.class);
-        myQuery.setParameter("target", courseID);
-        List<Student> results = myQuery.getResultList();
-        em.getTransaction().commit();
-        return (results);
+        return getResultList(Student.class,sql);
     }
     
     @Override
@@ -161,11 +150,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         
         final String sql = "SELECT ID,NAME FROM COURSE "
                 + "WHERE SUPERVISOR_ID IS NULL";
-        em.getTransaction().begin();
-        Query myQuery = em.createNativeQuery(sql,Course.class);
-        List<Course> results = myQuery.getResultList();
-        em.getTransaction().commit();
-        return (results);
+        return getResultList(Course.class,sql);
     }
     @Override
     public Optional<Course> findCourse(final int id) {
