@@ -135,17 +135,17 @@ public final class SearchMenu extends AbstractMenu {
     }
     
     private static String findEducationById(int id) {
-        Education foundEducation = educationDAO.findEducation(id);
-        /**
-         * Default return message if search yields 0 results
-         */
-        String result = "Found no matching entry for " + id +
-                " in database";
         
-        if (foundEducation != null)
-            result = "Found matching COURSE: " + foundEducation.toString();
+        Optional<Education> foundEducation = educationDAO.findEducation(id);
+        String result = null;
         
-        return result;
+        if (foundEducation.isPresent()) {
+            result = "Found matching EDUCATION: " + foundEducation.get().toString();
+        } else {
+            result = "Found no matching entry for " + id + " in database";
+        }
+        
+       return result;
     }
         
 }

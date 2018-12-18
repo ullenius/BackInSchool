@@ -94,14 +94,16 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         persistStuff(teacherToAdd);
     }
     
+    /**
+     * 
+     * Calls generic method implemented in superclass (AbstractImplementation)
+     * @param id
+     * @return 
+     */
     @Override
     public Optional<Teacher> findTeacher(final int id) {
         
-        Teacher result = findById(Teacher.class,id);
-        if (result == null)
-            return Optional.empty();
-        else
-            return Optional.of(result);
+        return findEntity(Teacher.class,id);
     }
     
     @Override

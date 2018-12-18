@@ -7,6 +7,7 @@ import database.Course;
 import database.Education;
 import database.Student;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -23,7 +24,7 @@ public interface EducationDAO {
     public void addEducation(Education newEducation);
     public void deleteEducation(int id);
     public void updateEducationName(String newName, int id);
-    public Education findEducation(int id);
+    public Optional<Education> findEducation(int id);
     public List<Education> listAllEducations();
     public List<Course> listCoursesInEducation(int id);
     public List<Student> listStudentsInEducation(int id);
@@ -33,7 +34,8 @@ public interface EducationDAO {
      * (one education contains many Students)
      * 
      */
-    public void addStudentsToEducation(int educationID, Set<Integer> studentIdsToAdd);
+    public void addStudentsToEducation(int educationID, 
+            Set<Integer> studentIdsToAdd) throws EducationNotFoundException; 
     public void removeStudentsFromEducation(int educationID, Set<Integer> studentIdsToRemove);
   
     /**

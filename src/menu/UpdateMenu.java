@@ -7,6 +7,7 @@
 */
 package menu;
 
+import database.dao.EducationNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 /**
@@ -176,10 +177,15 @@ public final class UpdateMenu extends AbstractMenu {
         /**
          * Sends the education ID and a Set<Integer> to the method
          */
-        educationDAO.addStudentsToEducation(educationID, studentsToAdd);
-        
-            System.out.println("Successfully added " + studentsToAdd.size() 
-                  + " students to education");
+        try {
+            educationDAO.addStudentsToEducation(educationID, studentsToAdd);
+            System.out.println("Successfully added " + studentsToAdd.size()
+                    + " students to education");
+        } catch (EducationNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.out.println("FAILED to add students to education");
+        }
+          
     }
     
     private static void removeStudentsFromEducation() {

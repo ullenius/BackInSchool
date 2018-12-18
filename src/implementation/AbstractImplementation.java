@@ -9,6 +9,7 @@
 package implementation;
 
 import database.dao.Persistable;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -38,8 +39,9 @@ public abstract class AbstractImplementation {
      * if they are > 0 it was successfully executed
      *
      * @param customQuery
+     * @throws RuntimeException back to caller method
      */
-    boolean customQuery(final String customQuery) {
+    boolean customQuery(final String customQuery) throws RuntimeException {
         em.getTransaction().begin();
         
         Query myQuery = em.createNativeQuery(customQuery);
@@ -85,7 +87,9 @@ public abstract class AbstractImplementation {
      * @param entityClass
      * @return 
      */
-    
+    // Deprecated by findEntity
+    // because Optional<T> is superior over dealing with null-values
+    @Deprecated
     public <T extends Persistable> T findById(Class<T> entityClass, final int id) {
         
         em.getTransaction().begin();
@@ -93,6 +97,28 @@ public abstract class AbstractImplementation {
         
         em.getTransaction().commit();
         return result;
+    }
+    
+    /**
+     * 
+     * Finds a generic <T> Persistable (see interface) entity
+     * and returns it as an Optional<T>
+     * @param <T>
+     * @param entityClass
+     * @param id
+     * @return 
+     */
+     <T extends Persistable> Optional<T> findEntity(Class<T> entityClass, final int id) {
+        
+        em.getTransaction().begin();
+        T result = em.find(entityClass, id);
+       
+        em.getTransaction().commit();
+      
+           if (result == null)
+            return Optional.empty();
+        else
+            return Optional.of(result);
     }
     
     /**

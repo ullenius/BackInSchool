@@ -94,11 +94,7 @@ public class StudentDAOImplementation extends AbstractImplementation implements 
     @Override
     public Optional<Student> findStudentById(final int id) {
         
-        Student result = findById(Student.class,id);
-        if (result == null)
-            return Optional.empty();
-        else
-            return Optional.of(result);
+        return findEntity(Student.class,id);
     }
     
     

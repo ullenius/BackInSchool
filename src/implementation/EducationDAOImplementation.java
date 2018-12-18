@@ -7,8 +7,12 @@ import database.Course;
 import database.Education;
 import database.Student;
 import database.dao.EducationDAO;
+import database.dao.EducationNotFoundException;
+import database.dao.StudentNotFoundException;
+import static implementation.AbstractImplementation.em;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.persistence.Query;
 
@@ -40,6 +44,14 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         persistStuff(newEducation);
     }
 
+    /**
+     * 
+     * JPA handles all the deletions in the linked tables
+     * EDUATION_COURSE and EDUCATION_STUDENT. We don't have to
+     * do it manually
+     * 
+     * @param id 
+     */
     @Override
      public void deleteEducation(final int id) {
         
@@ -62,9 +74,9 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     }
 
     @Override
-    public Education findEducation(final int id) {
+    public Optional<Education> findEducation(final int id) {
         
-        return findById(Education.class,id);
+        return findEntity(Education.class,id); // generic method in superclass
     }
 
     /**
@@ -86,19 +98,38 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     }
 
     /**
+     * 
      * This method makes ONE SQL-query in order to ADD all entries at once
      * Uses Set for speed
      * Uses StringBuffer to avoid filling up the String-pool with junk Strings
+     *
+     * 
+     * It throws EducationNotFoundException and StudentNotFoundException.
+     * The latter if ONE of the Students in the Set<Integer> does not exist
+     * 
      * 
      * BUGS: SQL only supports adding 1000 entries at once
      * 
      * @param educationID
-     * @param studentIdsToAdd 
+     * @param studentIdsToAdd
+     * @throws EducationNotFoundException
+     * @throws StudentNotFoundException 
      */
     @Override
     public void addStudentsToEducation(final int educationID, 
-            final Set<Integer> studentIdsToAdd) {
+            final Set<Integer> studentIdsToAdd) throws EducationNotFoundException {
         
+        // Make sure that the Education ID exists...
+        String checkEducation = "SELECT EDUCATION.ID WHERE ID = " + educationID;
+        if (!customQuery(checkEducation)) // rows affected > 0
+        throw new EducationNotFoundException("No education with ID:" 
+                + educationID + " found!");        
+                
+        /**
+         * 
+         * Everything went well, now lets try to insert all values at once.
+         * Throws exception if something goes wrong
+         */
         StringBuilder sql = new StringBuilder("INSERT INTO EDUCATION_STUDENT"
                 + " (Education_ID, studentGroup_ID) VALUES");
         
@@ -109,7 +140,15 @@ public class EducationDAOImplementation extends AbstractImplementation implement
          // removes the last ',' character
         sql.deleteCharAt(sql.length()-1);
         
-        customQuery(sql.toString()); // executes the Query
+        try {
+            customQuery(sql.toString()); // executes the Query
+        } catch (RuntimeException e) {
+            System.out.println("Something fucked up. Doing rollback");
+            System.out.println(e.getMessage());
+            if (em != null && em.getTransaction().isActive())
+                em.getTransaction().rollback();
+        }
+        
     }
     
     /**
@@ -160,7 +199,15 @@ public class EducationDAOImplementation extends AbstractImplementation implement
          // removes the last ',' character
         sql.deleteCharAt(sql.length()-1);
         
+        try {
         customQuery(sql.toString()); // executes the Query
+        } catch (RuntimeException e) {
+            System.out.println("Something fucked up. Doing rollback");
+            System.out.println(e.getMessage());
+            if (em != null && em.getTransaction().isActive())
+                em.getTransaction().rollback();
+        }
+        
     }
 
     /**
