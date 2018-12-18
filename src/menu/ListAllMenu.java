@@ -38,7 +38,6 @@ public final class ListAllMenu extends AbstractMenu {
         int userChoice = -1;
         while (true) {
             System.out.println("LIST ALL SUBMENU");
-            
             System.out.println("Display all entries from database");
             
             System.out.println("1. " + STUDENT);

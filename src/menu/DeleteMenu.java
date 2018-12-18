@@ -47,7 +47,6 @@ public final class DeleteMenu extends AbstractMenu {
             System.out.println("4. " + EDUCATION);
             System.out.println("5. " + EXIT);
             
-            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -56,7 +55,7 @@ public final class DeleteMenu extends AbstractMenu {
                     targetID = feedMe.getInt("Enter STUDENT id to delete: ");
                     System.out.println("Deleting STUDENT" + targetID);
                     try {
-                     studentDAO.deleteStudent(targetID);
+                        studentDAO.deleteStudent(targetID);
                     } catch (StudentNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -67,7 +66,7 @@ public final class DeleteMenu extends AbstractMenu {
                     targetID = feedMe.getInt("Enter TEACHER id to delete: ");
                     System.out.println("Deleting TEACHER " + targetID);
                     try {
-                    teacherDAO.deleteTeacher(targetID); 
+                        teacherDAO.deleteTeacher(targetID);
                     } catch (TeacherNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -97,6 +96,5 @@ public final class DeleteMenu extends AbstractMenu {
         }
         
     }
-    
     
 }

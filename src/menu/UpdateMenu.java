@@ -38,11 +38,11 @@ public final class UpdateMenu extends AbstractMenu {
         STUDENT = "Update student name";
         TEACHER = "Update teacher name";
         COURSE = "Update course name";
-        
+
         SUPERVISOR = "Set a new supervisor";
-        
         EDUCATION = "Update education name";
         EDUCATION_ADD_STUDENTS = "ADD students to education";
+
         EDUCATION_REMOVE_STUDENTS = "DELETE students from education";
         EDUCATION_ADD_COURSES = "ADD courses to education";
         EDUCATION_REMOVE_COURSES = "DELETE courses from education";
@@ -169,7 +169,7 @@ public final class UpdateMenu extends AbstractMenu {
         if (supervisorID.intValue() == -1)
             supervisorID = null;
         try {
-        courseDAO.updateSupervisor(courseID, supervisorID);
+            courseDAO.updateSupervisor(courseID, supervisorID);
         } catch (CourseNotFoundException | TeacherNotFoundException e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to update supervisor!");
@@ -193,7 +193,7 @@ public final class UpdateMenu extends AbstractMenu {
             System.out.println(e.getMessage());
             System.out.println("FAILED to add students to education");
         }
-          
+        
     }
     
     private static void removeStudentsFromEducation() {
@@ -206,18 +206,17 @@ public final class UpdateMenu extends AbstractMenu {
          * Sends the education ID and a Set<Integer> to the method
          */
         educationDAO.removeStudentsFromEducation(educationID, studentsToRemove);
-          System.out.println("Successfully removed " + studentsToRemove.size() 
-                  + " students to education");
+        System.out.println("Successfully removed " + studentsToRemove.size()
+                + " students to education");
     }
     /**
      *
      * This is a helper method used for interactive
-     * user I/O. 
-     * 
+     * user I/O.
+     *
      * Takes input from the user and puts it in an
      * int and a Set<Integer>
      *
-     * Design pattern: DRY - don't repeat yourself
      */
     private static Set<Integer> makeSet(String message)  {
         
@@ -255,6 +254,5 @@ public final class UpdateMenu extends AbstractMenu {
          */
         educationDAO.removeCoursesFromEducation(educationID, coursesToRemove);
     }
-    
     
 }

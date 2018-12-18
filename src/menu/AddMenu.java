@@ -45,15 +45,15 @@ public final class AddMenu extends AbstractMenu {
         Education newEducation = null;
         
         while (true) {
-        System.out.println("ADDING SUB-MENU");
-        System.out.println("Adding entries to database");
-        
-        System.out.println("1. " + STUDENT);
-        System.out.println("2. " + TEACHER);
-        System.out.println("3. " + COURSE);
-        System.out.println("4. " + EDUCATION);
-        System.out.println("5. " + EXIT);
-        
+            System.out.println("ADDING SUB-MENU");
+            System.out.println("Adding entries to database");
+            
+            System.out.println("1. " + STUDENT);
+            System.out.println("2. " + TEACHER);
+            System.out.println("3. " + COURSE);
+            System.out.println("4. " + EDUCATION);
+            System.out.println("5. " + EXIT);
+            
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {
                 
@@ -126,12 +126,12 @@ public final class AddMenu extends AbstractMenu {
         supervisorID = feedMe.getInt("Enter supervisor (teacher id): ");
         
         /**
-         * 
+         *
          * Include option to have no supervisor set? I.e. NULL
          */
         Optional<Teacher> supervisor = teacherDAO.findTeacher(supervisorID);
         if (supervisor.isPresent()) {
-         newCourse.setSupervisor(supervisor.get());
+            newCourse.setSupervisor(supervisor.get());
         } else {
             System.out.println("No teacher found. Supervisor it set to NULL");
             newCourse.setSupervisor(null); // this works when persisting entity
@@ -142,7 +142,7 @@ public final class AddMenu extends AbstractMenu {
     }
     
     private static Education makeEducation() {
-
+        
         System.out.println("Creating a new EDUCATION object");
         String name = feedMe.getText("Enter name");
         name = name.trim();

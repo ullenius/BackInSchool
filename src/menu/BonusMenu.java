@@ -91,10 +91,7 @@ public final class BonusMenu extends AbstractMenu {
                 case 6:
                     System.out.println(COURSES_IN_EDUCATION);
                     targetID = feedMe.getInt("Enter EDUCATION id: ");
-                    
-                    // DETTA BUGGAR SIG PGA ATT DEN CACHAR
-                    // LÄGG IN REFRESH ALTERNATIVT ANVÄND EN NATIVE QUERY
-                    // JPA SUGER
+                    // this doesn't work due to JPA caching
                     //educationDAO.findEducation(targetID).getCourseGroup().forEach(System.out::println);
                     educationDAO.listCoursesInEducation(targetID)
                             .forEach(System.out::println);

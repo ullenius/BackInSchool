@@ -26,7 +26,7 @@ public final class MainMenu extends AbstractMenu {
     
     private static final String CREATE;
     private static final String READ;
-    private static final String UPDATE; // NOT yet implemented
+    private static final String UPDATE;
     private static final String DELETE;
     private static final String SEARCH;
     private static final String BONUS;

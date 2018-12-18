@@ -2,9 +2,6 @@
 * This class contains code used by all of the Menu-subclasses
 * Design pattern DRY: - don't repeat yourself
 *
-* Separate what changes from what stays the same
-*
-*
 */
 package menu;
 
