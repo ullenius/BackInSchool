@@ -3,6 +3,7 @@
 */
 package implementation;
 
+import database.dao.TeacherNotFoundException;
 import database.Person;
 import database.Teacher;
 import database.dao.TeacherDAO;
@@ -47,12 +48,16 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
      * Total number of queries executed: 2
      * 
      * @Throws TeacherNotFoundException if id does not exist in database
-     * (more precicisely of the UPDATE COURSE sql-query affects 0 rows)
+     * (more precicisely of the UPDATE COURSE sql-query affects 0 rows).
+     * No need to worry about the roll-back. This method handles that 
+     * automatically.
      * 
      * @param id 
+     * @throws TeacherNotFoundException 
      */
     @Override
     public void deleteTeacher(int id) throws TeacherNotFoundException {
+
         em.getTransaction().begin();
         
         Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET "
@@ -65,7 +70,7 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         System.out.println("rows affected = " + rowsAffected);
         
         if (rowsAffected == 0) {
-            em.getTransaction().commit();
+            em.getTransaction().rollback(); // perform rollback
             throw new TeacherNotFoundException("Deletion failed. Teacher: " + id
             + " not found in database");
         }

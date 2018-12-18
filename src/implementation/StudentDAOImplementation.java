@@ -6,7 +6,10 @@ package implementation;
 import database.Person;
 import database.Student;
 import database.dao.StudentDAO;
+import database.dao.StudentNotFoundException;
+import static implementation.AbstractImplementation.em;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Query;
 
 /**
@@ -52,28 +55,52 @@ public class StudentDAOImplementation extends AbstractImplementation implements 
         customQuery(sql);
     }
     
+    /**
+     * 
+     * This method removes the Student from the STUDENT-table. However
+     * due to constraints it first removes ALL the rows with the matching
+     * Student-ID in the linked table.
+     * 
+     * If deletion in the linked table fails it performs a rollback and 
+     * @Throws StudentNotFoundException
+     * 
+     * @param id 
+     * @throws StudentNotFoundException 
+     */
+    
     @Override
-    public void deleteStudent(final int id) {
+    public void deleteStudent(final int id) throws StudentNotFoundException {
         
         em.getTransaction().begin();
         
         // deletes the students from the Educations that they are tied to
         Query cleanUp = em.createNativeQuery("DELETE FROM EDUCATION_STUDENT WHERE studentGroup_ID = ?target;");
         cleanUp.setParameter("target", id);
-        cleanUp.executeUpdate();
+        
+        int rowsAffected = cleanUp.executeUpdate();  // returns # of rows affected
+        if (rowsAffected == 0) {
+            em.getTransaction().rollback(); // perform rollback
+            throw new StudentNotFoundException("Deletion failed.Student: " + id
+            + " not found in database");
+        }
         
         Query myQuery = em.createNativeQuery("DELETE FROM STUDENT WHERE ID = ?target;");
         myQuery.setParameter("target", id);
-        
         myQuery.executeUpdate();
         
         em.getTransaction().commit();
     }
-
+    
     @Override
-    public Student findStudentById(final int id) {
-        return findById(Student.class,id);
+    public Optional<Student> findStudentById(final int id) {
+        
+        Student result = findById(Student.class,id);
+        if (result == null)
+            return Optional.empty();
+        else
+            return Optional.of(result);
     }
+    
     
     @Override
     public List<Student> listStudentsInCourse(final int courseID) {
@@ -141,5 +168,4 @@ public class StudentDAOImplementation extends AbstractImplementation implements 
         return (results);
     }
  
-    
 }

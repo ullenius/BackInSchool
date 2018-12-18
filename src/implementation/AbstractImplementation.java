@@ -23,8 +23,6 @@ public abstract class AbstractImplementation {
     static final EntityManagerFactory emf;
     static final EntityManager em;
     
-    AbstractImplementation closingReference;
-    
     static {
         emf = Persistence.createEntityManagerFactory("BackInSchoolPU");
         em = emf.createEntityManager();

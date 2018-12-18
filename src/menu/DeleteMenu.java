@@ -7,10 +7,8 @@
 */
 package menu;
 
-import implementation.AbstractImplementation;
-import implementation.CourseDAOImplementation;
-import implementation.TeacherDAOImplementation;
-import implementation.TeacherNotFoundException;
+import database.dao.StudentNotFoundException;
+import database.dao.TeacherNotFoundException;
 import static menu.AbstractMenu.courseDAO;
 
 /**
@@ -56,8 +54,12 @@ public final class DeleteMenu extends AbstractMenu {
                 case 1:
                     System.out.println(STUDENT);
                     targetID = feedMe.getInt("Enter STUDENT id to delete: ");
-                    studentDAO.deleteStudent(targetID);
                     System.out.println("Deleting STUDENT" + targetID);
+                    try {
+                     studentDAO.deleteStudent(targetID);
+                    } catch (StudentNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
@@ -68,11 +70,7 @@ public final class DeleteMenu extends AbstractMenu {
                     teacherDAO.deleteTeacher(targetID); 
                     } catch (TeacherNotFoundException e) {
                         System.out.println(e.getMessage());
-                        // FULHACK!
-                        AbstractImplementation ref = (TeacherDAOImplementation) teacherDAO;
-                        ref.closeEverything();
                     }
-                    
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:

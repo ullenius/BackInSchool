@@ -7,7 +7,6 @@ package database.dao;
 
 import database.Person;
 import database.Teacher;
-import implementation.TeacherNotFoundException;
 import java.util.List;
 import java.util.Optional;
 

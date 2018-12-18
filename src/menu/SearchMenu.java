@@ -83,20 +83,25 @@ public final class SearchMenu extends AbstractMenu {
         }
     }
     
+    
+    /**
+     * 
+     * Göra om detta till en generisk metod? Om jag har tid/orkar
+     * @param id
+     * @return 
+     */
     private static String findStudentById(int id) {
         
-        Student foundStudent = studentDAO.findStudentById(id);
+        Optional<Student> foundStudent = studentDAO.findStudentById(id);
+        String result = null;
         
-        /**
-         * Default return message if search yields 0 results
-         */
-        String result = "Found no matching entry for " + id +
-                " in database";
+        if (foundStudent.isPresent()) {
+            result = "Found matching STUDENT: " + foundStudent.get().toString();
+        } else {
+            result = "Found no matching entry for " + id + " in database";
+        }
         
-        if (foundStudent != null)
-            result = "Found matching student: " + foundStudent.toString();
-        
-        return result;
+       return result;
     }
     
     private static String findTeacherById(int id) {
@@ -105,7 +110,7 @@ public final class SearchMenu extends AbstractMenu {
         String result = null;
         
         if (foundTeacher.isPresent()) {
-            result = "Found matching TEACHER: " + foundTeacher.toString();
+            result = "Found matching TEACHER: " + foundTeacher.get().toString();
         } else {
             result = "Found no matching entry for " + id + " in database";
         }
