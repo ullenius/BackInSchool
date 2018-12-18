@@ -95,17 +95,22 @@ abstract class AbstractImplementation {
         return result;
     }
     
-    // DEMO CODE
-//    public static void main(String[] args) {
-//        
-//        AbstractImplementation abstrakt = new AbstractImplementation();
-//        
-//        Student newStudent = abstrakt.findById(201, Student.class);
-//        Teacher newTeacher = abstrakt.findById(151, Teacher.class);
-//        
-//        System.out.println(newStudent.getName());
-//        System.out.println(newTeacher.getName());
-//        
-//    }
+    /**
+     * 
+     * Method that closes the EntityManager
+     * and the EntityManager Factory
+     * 
+     * Used for cleanup. Cannot be overriden
+     * in subclasses
+     */
+    final static void closeEverything() {
     
+    if (em.isOpen())
+        em.close();
+
+    if (emf.isOpen())
+        emf.close();
+}
+    
+        
 }
