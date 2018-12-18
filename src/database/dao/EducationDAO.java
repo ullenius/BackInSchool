@@ -35,7 +35,8 @@ public interface EducationDAO {
      * 
      */
     public void addStudentsToEducation(int educationID, 
-            Set<Integer> studentIdsToAdd) throws EducationNotFoundException; 
+            Set<Integer> studentIdsToAdd) throws EducationNotFoundException, 
+            StudentNotFoundException; 
     public void removeStudentsFromEducation(int educationID, Set<Integer> studentIdsToRemove);
   
     /**

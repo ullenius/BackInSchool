@@ -9,7 +9,6 @@ import database.Student;
 import database.dao.EducationDAO;
 import database.dao.EducationNotFoundException;
 import database.dao.StudentNotFoundException;
-import static implementation.AbstractImplementation.em;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -117,7 +116,8 @@ public class EducationDAOImplementation extends AbstractImplementation implement
      */
     @Override
     public void addStudentsToEducation(final int educationID,
-            final Set<Integer> studentIdsToAdd) throws EducationNotFoundException {
+            final Set<Integer> studentIdsToAdd) 
+            throws EducationNotFoundException, StudentNotFoundException {
         
         // Make sure that the Education ID exists...
         String checkEducation = "SELECT ID,NAME FROM EDUCATION WHERE ID = " + educationID;
@@ -147,6 +147,9 @@ public class EducationDAOImplementation extends AbstractImplementation implement
             System.out.println(e.getMessage());
             if (em != null && em.getTransaction().isActive())
                 em.getTransaction().rollback();
+            // Throws a new Exception
+            throw new StudentNotFoundException("One or more provided Student IDs "
+                    + "does not exist in the database!");
         }
         
     }

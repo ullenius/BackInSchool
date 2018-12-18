@@ -9,6 +9,7 @@ package menu;
 
 import database.dao.CourseNotFoundException;
 import database.dao.EducationNotFoundException;
+import database.dao.StudentNotFoundException;
 import database.dao.TeacherNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
@@ -188,7 +189,7 @@ public final class UpdateMenu extends AbstractMenu {
             educationDAO.addStudentsToEducation(educationID, studentsToAdd);
             System.out.println("Successfully added " + studentsToAdd.size()
                     + " students to education");
-        } catch (EducationNotFoundException e) {
+        } catch (EducationNotFoundException | StudentNotFoundException e) {
             System.out.println(e.getMessage());
             System.out.println("FAILED to add students to education");
         }
