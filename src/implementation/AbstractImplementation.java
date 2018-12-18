@@ -47,44 +47,31 @@ public abstract class AbstractImplementation {
         
         Query myQuery = em.createNativeQuery(customQuery);
         int result = myQuery.executeUpdate();
-        
         em.getTransaction().commit();
         
         return (result > 0);
     }
-
     
     /**
-     * 
+     *
      * A generic helper method that performs a custom SQL SELECT statement and
      * returns a resultlist of type <T extends Persistable>
-     * 
+     *
      * @param <T>
      * @param entityClass
      * @param customQuery
-     * @return 
+     * @return
      */
-    <T extends Persistable> List<T> getResultList(Class<T> entityClass, 
+    <T extends Persistable> List<T> getResultList(Class<T> entityClass,
             final String customQuery) {
         
         em.getTransaction().begin();
         Query myQuery = em.createNativeQuery(customQuery,entityClass);
-  
-        List<T> resultList = myQuery.getResultList();
         
+        List<T> resultList = myQuery.getResultList();
         em.getTransaction().commit();
         return resultList;
     }
-    
-    /**
-     *
-     * This generic method is used to persist objects of Entity-class types
-     * (the one I use in this project). Persistable is an empty marker
-     * interface whose sole purpose is to distinguish them.
-     *
-     * @param <T>
-     * @param entityToCommit
-     */
     
     /**
      * This generic method is used to persist objects of Entity-class types
@@ -101,67 +88,42 @@ public abstract class AbstractImplementation {
     }
     
     /**
-     * 
-     * This is a generic helper method used to return a class T of type
-     * Persistable (marker interface) with a given id
-     * 
-     * Used to avoid code duplication in DAO implementation classes
-     * 
-     * @param <T>
-     * @param id
-     * @param entityClass
-     * @return 
-     */
-    // Deprecated by findEntity
-    // because Optional<T> is superior over dealing with null-values
-    @Deprecated
-    public <T extends Persistable> T findById(Class<T> entityClass, final int id) {
-        
-        em.getTransaction().begin();
-        T result = em.find(entityClass,id);
-        
-        em.getTransaction().commit();
-        return result;
-    }
-    
-    /**
-     * 
+     *
      * Finds a generic <T> Persistable (see interface) entity
      * and returns it as an Optional<T>
      * @param <T>
      * @param entityClass
      * @param id
-     * @return 
+     * @return
      */
-     <T extends Persistable> Optional<T> findEntity(Class<T> entityClass, final int id) {
+    <T extends Persistable> Optional<T> findEntity(Class<T> entityClass, final int id) {
         
         em.getTransaction().begin();
         T result = em.find(entityClass, id);
-       
         em.getTransaction().commit();
-      
-           if (result == null)
+        
+        if (result == null)
             return Optional.empty();
         else
             return Optional.of(result);
     }
     
     /**
-     * 
+     *
      * Method that closes the EntityManager
      * and the EntityManager Factory
-     * 
+     *
      * Used for cleanup. Cannot be overriden
      * in subclasses
      */
     public final void closeEverything() {
-    
-    if (em.isOpen())
-        em.close();
-
-    if (emf.isOpen())
-        emf.close();
-}
-    
         
+        if (em.isOpen())
+            em.close();
+        
+        if (emf.isOpen())
+            emf.close();
+    }
+    
+    
 }
