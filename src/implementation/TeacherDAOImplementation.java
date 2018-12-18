@@ -70,6 +70,7 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     
     @Deprecated
     // Deprecated by addPerson method
+    @Override
     public void addTeacher(Teacher teacherToAdd) {
         persistStuff(teacherToAdd);
     }

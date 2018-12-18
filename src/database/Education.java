@@ -10,6 +10,7 @@
 package database;
 
 import database.dao.Persistable;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +22,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Education implements Persistable {
+public class Education implements Persistable, Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

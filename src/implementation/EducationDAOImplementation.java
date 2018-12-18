@@ -34,7 +34,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         }
         return instance;
     }
-
+    @Override
     public void addEducation(final Education newEducation) {
         
         persistStuff(newEducation);
@@ -99,7 +99,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     public void addStudentsToEducation(final int educationID, 
             final Set<Integer> studentIdsToAdd) {
         
-        StringBuffer sql = new StringBuffer("INSERT INTO EDUCATION_STUDENT"
+        StringBuilder sql = new StringBuilder("INSERT INTO EDUCATION_STUDENT"
                 + " (Education_ID, studentGroup_ID) VALUES");
         
         Iterator myIterator = studentIdsToAdd.iterator();
@@ -122,7 +122,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     public void removeStudentsFromEducation(final int educationID, 
             Set<Integer> studentIdsToRemove) {
         
-        StringBuffer sql = new StringBuffer("DELETE FROM EDUCATION_STUDENT " +
+        StringBuilder sql = new StringBuilder("DELETE FROM EDUCATION_STUDENT " +
         "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
         
         Iterator myIterator = studentIdsToRemove.iterator();
@@ -150,7 +150,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     @Override
     public void addCoursesToEducation(int educationID, Set<Integer> courseIDsToAdd) {
         
-        StringBuffer sql = new StringBuffer("INSERT INTO EDUCATION_COURSE "
+        StringBuilder sql = new StringBuilder("INSERT INTO EDUCATION_COURSE "
                 + " (Education_ID, courseGroup_ID) VALUES");
         
         Iterator myIterator = courseIDsToAdd.iterator();

@@ -1,6 +1,7 @@
 package database;
 
 import database.dao.Persistable;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +13,7 @@ import javax.persistence.ManyToOne;
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
 @Entity
-public class Course implements Persistable {
+public class Course implements Persistable, Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -48,7 +49,7 @@ public class Course implements Persistable {
     public String getName() {
         return name;
     }
-    
+    @Override
     public String toString() {
         return id + " " + name;
     }

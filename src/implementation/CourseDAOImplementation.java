@@ -76,6 +76,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
      * @param courseID
      * @param supervisorID
      */
+    @Override
     public void updateSupervisor(final int courseID, final Integer supervisorID) {
         
         String sql = "UPDATE COURSE SET SUPERVISOR_ID=" + supervisorID;
@@ -132,7 +133,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         em.getTransaction().commit();
         return (results);
     }
-    
+    @Override
      public Course findCourse(final int id) {
        return findById(Course.class,id);
     }
