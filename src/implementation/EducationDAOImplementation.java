@@ -39,7 +39,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     }
     @Override
     public void addEducation(final Education newEducation) {
-        
+
         persistStuff(newEducation);
     }
     
@@ -55,11 +55,9 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     public void deleteEducation(final int id) {
         
         em.getTransaction().begin();
-        
         Education target = em.find(Education.class, id);
         if (target != null)
             em.remove(target);
-        
         em.getTransaction().commit();
     }
     
@@ -68,7 +66,6 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         
         String sql = "UPDATE EDUCATION SET NAME=\"";
         sql = sql.concat(newName+"\" WHERE ID = " + id);
-        
         customQuery(sql);
     }
     
@@ -86,14 +83,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     @Override
     public List<Education> listAllEducations() {
         final String sql = "SELECT id,name FROM EDUCATION ORDER BY name;";
-        
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(sql,Education.class);
-        List<Education> results = myQuery.getResultList();
-        
-        em.getTransaction().commit();
-        return (results);
+        return getResultList(Education.class,sql);
     }
     
     /**
@@ -144,7 +134,7 @@ public class EducationDAOImplementation extends AbstractImplementation implement
             customQuery(sql.toString()); // executes the Query
         } catch (RuntimeException e) {
             System.out.println("Something fucked up. Doing rollback");
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             if (em != null && em.getTransaction().isActive())
                 em.getTransaction().rollback();
             // Throws a new Exception
@@ -153,7 +143,6 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         }
         
     }
-    
     /**
      *
      * This method makes ONE SQL-query in order to REMOVE all entries at once
@@ -166,15 +155,13 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         
         StringBuilder sql = new StringBuilder("DELETE FROM EDUCATION_STUDENT " +
                 "WHERE Education_ID =" +educationID + " AND studentGroup_ID IN (");
-        
+
         Iterator myIterator = studentIdsToRemove.iterator();
         while (myIterator.hasNext()) {
             sql.append(myIterator.next() + ",");
         }
-        
         // replaces the last character ',' with an ending ')'
         sql.setCharAt(sql.length()-1, ')');
-        
         customQuery(sql.toString()); // executes the query
     }
     
@@ -201,12 +188,11 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         }
         // removes the last ',' character
         sql.deleteCharAt(sql.length()-1);
-        
         try {
             customQuery(sql.toString()); // executes the Query
         } catch (RuntimeException e) {
             System.out.println("Something fucked up. Doing rollback");
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             if (em != null && em.getTransaction().isActive())
                 em.getTransaction().rollback();
         }
@@ -236,7 +222,6 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         }
         // replaces the last character ',' with an ending ')'
         sql.setCharAt(sql.length()-1, ')');
-        
         customQuery(sql.toString()); // executes the query
     }
     
@@ -256,17 +241,8 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         final String sql = "SELECT COURSE.ID,COURSE.NAME,COURSE.SUPERVISOR_ID "
                 + "FROM COURSE,EDUCATION_COURSE "
                 + "WHERE COURSE.ID = EDUCATION_COURSE.coursegroup_id "
-                + "AND EDUCATION_COURSE.education_id = ?target;";
-        
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(sql,Course.class);
-        myQuery.setParameter("target", id);
-        
-        List<Course> results = myQuery.getResultList();
-        
-        em.getTransaction().commit();
-        return (results);
+                + "AND EDUCATION_COURSE.education_id = " + id;
+        return getResultList(Course.class,sql);
     }
     
     @Override
@@ -275,17 +251,8 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         final String sql = "SELECT STUDENT.ID,STUDENT.NAME "
                 + "FROM STUDENT,EDUCATION_STUDENT "
                 + "WHERE STUDENT.ID = EDUCATION_STUDENT.studentgroup_id "
-                + "AND EDUCATION_STUDENT.education_id = ?target;";
-        
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(sql,Student.class);
-        myQuery.setParameter("target", id);
-        
-        List<Student> results = myQuery.getResultList();
-        
-        em.getTransaction().commit();
-        return (results);
+                + "AND EDUCATION_STUDENT.education_id = " + id;
+        return getResultList(Student.class,sql);
     }
     
 }

@@ -59,26 +59,21 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     public void deleteTeacher(int id) throws TeacherNotFoundException {
 
         em.getTransaction().begin();
-        
         Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET "
                 + "SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
         supervisorCleanup.setParameter("target", id);
-        
+
         // returns # of rows affected
         int rowsAffected = supervisorCleanup.executeUpdate();
-        
-        System.out.println("rows affected = " + rowsAffected);
-        
         if (rowsAffected == 0) {
             em.getTransaction().rollback(); // perform rollback
             throw new TeacherNotFoundException("Deletion failed. Teacher: " + id
             + " not found in database");
         }
-        
-        Query myQuery = em.createNativeQuery("DELETE FROM TEACHER WHERE ID = ?target;");
+        Query myQuery = em.createNativeQuery("DELETE FROM TEACHER "
+                + "WHERE ID = ?target;");
         myQuery.setParameter("target", id);
         myQuery.executeUpdate();
-        
         em.getTransaction().commit();
     }
     
@@ -109,34 +104,23 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     @Override
     public List<Teacher> listAllTeachers() {
         final String sql = "SELECT id,name FROM TEACHER ORDER BY name;";
-        
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(sql,Teacher.class);
-        List<Teacher> results = myQuery.getResultList();
-        
-        em.getTransaction().commit();
-        return (results);
+        return getResultList(Teacher.class,sql);
     }
     
-    @Override
-    public List<Teacher> listLonelyTeachers() {
         /**
          * This query lists all TEACHERS who do NOT supervise any COURSE
          * that is, *WITHOUT* ties to any COURSE
+         * 
+         * @return
          */
+    @Override
+    public List<Teacher> listLonelyTeachers() {
         final String sql = "SELECT TEACHER.NAME,TEACHER.ID,COURSE.SUPERVISOR_ID " +
                 "FROM TEACHER " +
                 "LEFT OUTER JOIN COURSE " +
                 "ON TEACHER.ID = COURSE.SUPERVISOR_ID " +
                 "WHERE SUPERVISOR_ID IS NULL;";
-        em.getTransaction().begin();
-        
-        Query myQuery = em.createNativeQuery(sql,Teacher.class);
-        List<Teacher> results = myQuery.getResultList();
-        
-        em.getTransaction().commit();
-        return (results);
+        return getResultList(Teacher.class,sql);
     }
     
     @Override
@@ -144,7 +128,6 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         
         String sql = "UPDATE TEACHER SET NAME=\"";
         sql = sql.concat(newName+"\" WHERE ID = " + id);
-        
         customQuery(sql);
     }
 }

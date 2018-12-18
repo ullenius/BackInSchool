@@ -44,11 +44,9 @@ public abstract class AbstractImplementation {
      */
     boolean customQuery(final String customQuery) throws RuntimeException {
         em.getTransaction().begin();
-        
         Query myQuery = em.createNativeQuery(customQuery);
         int result = myQuery.executeUpdate();
         em.getTransaction().commit();
-        
         return (result > 0);
     }
     
@@ -124,6 +122,5 @@ public abstract class AbstractImplementation {
         if (emf != null && emf.isOpen())
             emf.close();
     }
-    
     
 }
