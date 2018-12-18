@@ -1,6 +1,3 @@
-/*
- * 
- */
 package database.dao;
 
 import database.Course;

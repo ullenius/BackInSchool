@@ -1,6 +1,6 @@
 /*
-* This class contains code used by all of the Menu-subclasses
-* Design pattern DRY: - don't repeat yourself
+* This class contains static final objects used
+* by all subclasses. Intended for avoiding code duplication
 *
 */
 package menu;
