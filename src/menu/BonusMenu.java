@@ -21,12 +21,15 @@ public final class BonusMenu extends AbstractMenu {
     private static final String LONELY_STUDENTS;
     private static final String UNSUPERVISED_COURSES;
     
+    private static final String COURSES_IN_EDUCATION;
+    
     static {
         STUDENTS_COURSE = "List all STUDENTS from a course";
         STUDENTS_EDUCATION = "List all STUDENTS from an education";
         UNSUPERVISED_COURSES = "List all courses *WITHOUT* a supervisor";
         LONELY_STUDENTS = "List STUDENTS not tied to an EDUCATION";
         LONELY_TEACHERS = "List TEACHERS who do not SUPERVISE any COURSES";
+        COURSES_IN_EDUCATION ="List COURSES in a specific EDUCATION";
     }
     
     private BonusMenu() { // exits only to prevent instantiation
@@ -46,7 +49,8 @@ public final class BonusMenu extends AbstractMenu {
             System.out.println("3. " + UNSUPERVISED_COURSES);
             System.out.println("4. " + LONELY_STUDENTS);
             System.out.println("5. " + LONELY_TEACHERS);
-            System.out.println("6. " + EXIT);
+            System.out.println("6. " + COURSES_IN_EDUCATION);
+            System.out.println("7. " + EXIT);
             
             
             userChoice = feedMe.getInt("Please make your selection:");
@@ -55,13 +59,17 @@ public final class BonusMenu extends AbstractMenu {
                 case 1:
                     System.out.println(STUDENTS_COURSE);
                     targetID = feedMe.getInt("Enter COURSE id: ");
+                    
                     courseDAO.listStudentsInCourse(targetID).forEach(System.out::println);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 2:
                     System.out.println(STUDENTS_EDUCATION);
                     targetID = feedMe.getInt("Enter EDUCATION id: ");
-                    educationDAO.findEducation(targetID).getGroupOfStudents().forEach(System.out::println);
+                    educationDAO.listStudentsInEducation(targetID)
+                            .forEach(System.out::println);
+                    // JPA Caching SUCKS! Otherwise this would work
+                    //educationDAO.findEducation(targetID).getGroupOfStudents().forEach(System.out::println);
                     feedMe.getText("Press enter to continue");
                     break;
                 case 3:
@@ -81,6 +89,18 @@ public final class BonusMenu extends AbstractMenu {
                     feedMe.getText("Press enter to continue");
                     break;
                 case 6:
+                    System.out.println(COURSES_IN_EDUCATION);
+                    targetID = feedMe.getInt("Enter EDUCATION id: ");
+                    
+                    // DETTA BUGGAR SIG PGA ATT DEN CACHAR
+                    // LÄGG IN REFRESH ALTERNATIVT ANVÄND EN NATIVE QUERY
+                    // JPA SUGER
+                    //educationDAO.findEducation(targetID).getCourseGroup().forEach(System.out::println);
+                    educationDAO.listCoursesInEducation(targetID)
+                            .forEach(System.out::println);
+                    feedMe.getText("Press enter to continue");
+                    break;
+                case 7:
                     System.out.println("Exiting menu");
                     return; // exiting method
                 default:

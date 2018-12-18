@@ -3,7 +3,9 @@
  */
 package implementation;
 
+import database.Course;
 import database.Education;
+import database.Student;
 import database.dao.EducationDAO;
 import java.util.Iterator;
 import java.util.List;
@@ -186,6 +188,54 @@ public class EducationDAOImplementation extends AbstractImplementation implement
         sql.setCharAt(sql.length()-1, ')');
         
         customQuery(sql.toString()); // executes the query
+    }
+    
+    /**
+     * 
+     * JPA caching is complete and utter rubbish. Otherwise this would be
+     * unneccessary.
+     * 
+     * Thankfully native queries saves the day!
+     * 
+     * @param id
+     * @return 
+     */
+    @Override
+    public List<Course> listCoursesInEducation(int id) {
+        
+        final String sql = "SELECT COURSE.ID,COURSE.NAME,COURSE.SUPERVISOR_ID "
+                + "FROM COURSE,EDUCATION_COURSE "
+                + "WHERE COURSE.ID = EDUCATION_COURSE.coursegroup_id "
+                + "AND EDUCATION_COURSE.education_id = ?target;";
+        
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Course.class);
+        myQuery.setParameter("target", id);
+        
+        List<Course> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
+    }
+
+    @Override
+    public List<Student> listStudentsInEducation(int id) {
+
+        final String sql = "SELECT STUDENT.ID,STUDENT.NAME "
+                + "FROM STUDENT,EDUCATION_STUDENT "
+                + "WHERE STUDENT.ID = EDUCATION_STUDENT.studentgroup_id "
+                + "AND EDUCATION_STUDENT.education_id = ?target;";
+        
+        em.getTransaction().begin();
+        
+        Query myQuery = em.createNativeQuery(sql,Student.class);
+        myQuery.setParameter("target", id);
+        
+        List<Student> results = myQuery.getResultList();
+        
+        em.getTransaction().commit();
+        return (results);
     }
     
 }

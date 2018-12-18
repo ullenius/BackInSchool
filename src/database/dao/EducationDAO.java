@@ -5,6 +5,7 @@ package database.dao;
 
 import database.Course;
 import database.Education;
+import database.Student;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,8 @@ public interface EducationDAO {
     public void updateEducationName(String newName, int id);
     public Education findEducation(int id);
     public List<Education> listAllEducations();
+    public List<Course> listCoursesInEducation(int id);
+    public List<Student> listStudentsInEducation(int id);
     
     /**
      * ADD and DELETE from the list of Students

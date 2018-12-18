@@ -1,5 +1,7 @@
 package implementation;
 
+import menu.MainMenu;
+
 /**
  *
  * This is whole class is solely meant for TESTING STUFF
@@ -14,6 +16,8 @@ public final class Demo {
     }
     
     public static void main(String[] args) {
+        
+        MainMenu.printMenu();
         
     }
     
