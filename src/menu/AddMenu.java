@@ -13,6 +13,7 @@ import database.Education;
 import database.Person;
 import database.Student;
 import database.Teacher;
+import java.util.Optional;
 
 /**
  *
@@ -128,10 +129,15 @@ public final class AddMenu extends AbstractMenu {
          * 
          * Include option to have no supervisor set? I.e. NULL
          */
-        Teacher supervisor = teacherDAO.findTeacher(supervisorID);
-        newCourse.setSupervisor(supervisor);
-        System.out.println("New COURSE object successfully created");
+        Optional<Teacher> supervisor = teacherDAO.findTeacher(supervisorID);
+        if (supervisor.isPresent()) {
+         newCourse.setSupervisor(supervisor.get());
+        } else {
+            System.out.println("No teacher found. Supervisor it set to NULL");
+            newCourse.setSupervisor(null); // this works when persisting entity
+        }
         
+        System.out.println("New COURSE object successfully created");
         return newCourse;
     }
     

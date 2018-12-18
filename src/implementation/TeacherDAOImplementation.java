@@ -7,6 +7,7 @@ import database.Person;
 import database.Teacher;
 import database.dao.TeacherDAO;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Query;
 
 /**
@@ -45,16 +46,29 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
      * 
      * Total number of queries executed: 2
      * 
+     * @Throws TeacherNotFoundException if id does not exist in database
+     * (more precicisely of the UPDATE COURSE sql-query affects 0 rows)
+     * 
      * @param id 
      */
     @Override
-    public void deleteTeacher(int id) {
+    public void deleteTeacher(int id) throws TeacherNotFoundException {
         em.getTransaction().begin();
         
         Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET "
                 + "SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
         supervisorCleanup.setParameter("target", id);
-        supervisorCleanup.executeUpdate();
+        
+        // returns # of rows affected
+        int rowsAffected = supervisorCleanup.executeUpdate();
+        
+        System.out.println("rows affected = " + rowsAffected);
+        
+        if (rowsAffected == 0) {
+            em.getTransaction().commit();
+            throw new TeacherNotFoundException("Deletion failed. Teacher: " + id
+            + " not found in database");
+        }
         
         Query myQuery = em.createNativeQuery("DELETE FROM TEACHER WHERE ID = ?target;");
         myQuery.setParameter("target", id);
@@ -76,9 +90,13 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     }
     
     @Override
-    public Teacher findTeacher(final int id) {
-       
-        return findById(Teacher.class,id);
+    public Optional<Teacher> findTeacher(final int id) {
+        
+        Teacher result = findById(Teacher.class,id);
+        if (result == null)
+            return Optional.empty();
+        else
+            return Optional.of(result);
     }
     
     @Override

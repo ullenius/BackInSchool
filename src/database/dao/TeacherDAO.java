@@ -7,7 +7,9 @@ package database.dao;
 
 import database.Person;
 import database.Teacher;
+import implementation.TeacherNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -15,11 +17,11 @@ import java.util.List;
  */
 public interface TeacherDAO {
     
-    public void deleteTeacher(int id);
+    public void deleteTeacher(int id) throws TeacherNotFoundException;
     public void addPerson(Person personToAdd);
     @Deprecated
     public void addTeacher(Teacher teacherToAdd);
-    public Teacher findTeacher(int id);
+    public Optional<Teacher> findTeacher(int id);
     public List<Teacher> listAllTeachers();
     public List<Teacher> listLonelyTeachers();
     public void updateTeacherName(String newName, int id); 

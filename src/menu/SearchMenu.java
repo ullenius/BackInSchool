@@ -11,6 +11,7 @@ import database.Course;
 import database.Education;
 import database.Student;
 import database.Teacher;
+import java.util.Optional;
 
 /**
  *
@@ -100,18 +101,16 @@ public final class SearchMenu extends AbstractMenu {
     
     private static String findTeacherById(int id) {
         
-        Teacher foundTeacher = teacherDAO.findTeacher(id);
+        Optional<Teacher> foundTeacher = teacherDAO.findTeacher(id);
+        String result = null;
         
-        /**
-         * Default return message if search yields 0 results
-         */
-        String result = "Found no matching entry for " + id +
-                " in database";
-        
-        if (foundTeacher != null)
+        if (foundTeacher.isPresent()) {
             result = "Found matching TEACHER: " + foundTeacher.toString();
+        } else {
+            result = "Found no matching entry for " + id + " in database";
+        }
         
-        return result;
+       return result;
     }
     
     private static String findCourseById(int id) {
