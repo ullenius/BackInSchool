@@ -1,6 +1,3 @@
-/*
-*
-*/
 package database.dao;
 
 import database.Person;
@@ -14,7 +11,7 @@ import java.util.Optional;
  */
 public interface StudentDAO {
     
-     @Deprecated
+    @Deprecated
     public void addStudent(Student studentToAdd); // use addPerson instead
     public void addPerson(Person personToAdd);
     public void updateStudentName(String newName, int id);
