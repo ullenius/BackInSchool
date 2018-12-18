@@ -15,7 +15,7 @@ import static menu.AbstractMenu.courseDAO;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class DeleteMenu extends AbstractMenu {
+final class DeleteMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;

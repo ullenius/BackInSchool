@@ -16,7 +16,7 @@ package menu;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class ListAllMenu extends AbstractMenu {
+final class ListAllMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;

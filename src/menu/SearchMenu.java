@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class SearchMenu extends AbstractMenu {
+final class SearchMenu extends AbstractMenu {
     
     private static final String STUDENT;
     private static final String TEACHER;

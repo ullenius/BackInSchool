@@ -13,7 +13,7 @@ package menu;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class BonusMenu extends AbstractMenu {
+final class BonusMenu extends AbstractMenu {
     
     private static final String STUDENTS_COURSE;
     private static final String STUDENTS_EDUCATION;

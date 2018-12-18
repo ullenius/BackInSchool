@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class UpdateMenu extends AbstractMenu {
+final class UpdateMenu extends AbstractMenu {
     
     private UpdateMenu() { // exists only to defeat instantiation
         throw new AssertionError(); // this should never happen

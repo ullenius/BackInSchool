@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * @author Anosh D. Ullenius <anosh@anosh.se>
  */
-public final class AddMenu extends AbstractMenu {
+final class AddMenu extends AbstractMenu {
     
     private AddMenu() { // exists only to prevent instantiation
     }
