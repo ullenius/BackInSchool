@@ -63,11 +63,8 @@ public abstract class AbstractImplementation {
     <T extends Persistable> List<T> getResultList(Class<T> entityClass,
             final String customQuery) {
         
-        em.getTransaction().begin();
         Query myQuery = em.createNativeQuery(customQuery,entityClass);
-        
         List<T> resultList = myQuery.getResultList();
-        em.getTransaction().commit();
         return resultList;
     }
     
@@ -96,10 +93,7 @@ public abstract class AbstractImplementation {
      */
     <T extends Persistable> Optional<T> findEntity(Class<T> entityClass, final int id) {
         
-        em.getTransaction().begin();
         T result = em.find(entityClass, id);
-        em.getTransaction().commit();
-        
         if (result == null)
             return Optional.empty();
         else

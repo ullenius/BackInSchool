@@ -51,7 +51,13 @@ public class Course implements Persistable, Serializable {
     }
     @Override
     public String toString() {
-        return id + " " + name;
+        String tutor;
+        if (supervisor == null)
+            tutor = "NO SUPERVISOR";
+        else
+            tutor = getSupervisorName();
+        
+        return id + " " + name + " " + tutor;
     }
     
 }
