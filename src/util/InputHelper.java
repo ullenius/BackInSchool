@@ -28,7 +28,6 @@ public final class InputHelper {
     public String getText(String message) {
         System.out.print(message);
         StringBuilder input = new StringBuilder(sc.nextLine());
-        sc.nextLine(); // clears buffer
         return input.toString();
     }
     
