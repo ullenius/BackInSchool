@@ -124,10 +124,21 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     }
     
     @Override
+    /**
+     * 
+     * Uses JPQL in OOP-fashion. Treats Teacher as an object
+     * rather than a table in a database
+     */
     public void updateTeacherName(String newName, int id) {
         
-        String sql = "UPDATE TEACHER SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+        em.getTransaction().begin();
+        Query myQuery = em.createQuery("UPDATE Teacher teacher SET "
+                + "teacher.name = :new where teacher.id = :id");
+        myQuery.setParameter("id", id);
+        myQuery.setParameter("new", newName);
+        int result = myQuery.executeUpdate();
+        //System.out.println("rows affected = " + result);
+        em.getTransaction().commit();
+        
     }
 }
