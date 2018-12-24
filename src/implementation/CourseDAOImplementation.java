@@ -41,19 +41,28 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         persistStuff(newCourse);
     }
     
+    /**
+     * 
+     * TODO: Fix the cleanup using JPQL-queries
+     * 
+     * @param id
+     * @throws CourseNotFoundException 
+     */
+    
     @Override
-    public void deleteCourse(final int id) {
+    public void deleteCourse(final int id) throws CourseNotFoundException {
         em.getTransaction().begin();
         // Cleans up the @ManyToMany relationship with Courses in Education
+        
         Query cleanUpEducationCourseLinkedTable =
                 em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE "
                         + "courseGroup_ID = " + id);
         cleanUpEducationCourseLinkedTable.executeUpdate();
-
-        Query myQuery =
-                em.createNativeQuery("DELETE FROM COURSE WHERE ID = " + id);
-        myQuery.executeUpdate();
-        em.getTransaction().commit();
+        
+        Course course = em.find(Course.class, id);
+        if (course == null)
+            throw new CourseNotFoundException("Course was not found");
+        em.remove(course);
     }
     
     @Override
