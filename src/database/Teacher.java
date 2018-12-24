@@ -26,6 +26,10 @@ public class Teacher implements Person, Serializable {
         this.name = name;
     }
     
+    public void setName(String newName) {
+        name = newName;
+    }
+    
     @Override
     public String getName() {
         return name;
