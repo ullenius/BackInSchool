@@ -48,7 +48,6 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
      * @param id
      * @throws CourseNotFoundException 
      */
-    
     @Override
     public void deleteCourse(final int id) throws CourseNotFoundException {
         em.getTransaction().begin();
@@ -63,14 +62,26 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         if (course == null)
             throw new CourseNotFoundException("Course was not found");
         em.remove(course);
+        em.getTransaction().commit();
     }
     
+    
+    /**
+     * 
+     * We don't need to persist. JPA performs dirty checking at commit
+     * and automatically updates the course if the name has changed.
+     * 
+     * @param newName
+     * @param id 
+     */
     @Override
-    public void updateCourseName(String newName, int id) {
-        
-        String sql = "UPDATE COURSE SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+    public void updateCourseName(String newName, int id) throws CourseNotFoundException {
+        em.getTransaction().begin();
+        Course course = em.find(Course.class,id);
+        if (course == null)
+            throw new CourseNotFoundException("Course was not found");
+        course.setName(newName.trim()); // removes whitespace
+        em.getTransaction().commit();
     }
     /**
      * 

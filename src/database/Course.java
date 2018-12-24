@@ -49,6 +49,11 @@ public class Course implements Persistable, Serializable {
     public String getName() {
         return name;
     }
+    
+    public void setName(String newName) {
+        name = newName;
+    }
+    
     @Override
     public String toString() {
         String tutor;

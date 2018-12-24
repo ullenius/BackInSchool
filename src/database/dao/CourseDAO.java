@@ -13,7 +13,7 @@ public interface CourseDAO {
     
     public void addCourse(Course newCourse);
     public void deleteCourse(int id) throws CourseNotFoundException;
-    public void updateCourseName(String newName, int id);
+    public void updateCourseName(String newName, int id) throws CourseNotFoundException;
     public void updateSupervisor(int courseID, Integer supervisorID) 
             throws CourseNotFoundException, TeacherNotFoundException;
     
