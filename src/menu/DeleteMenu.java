@@ -7,6 +7,7 @@
 */
 package menu;
 
+import database.dao.CourseNotFoundException;
 import database.dao.StudentNotFoundException;
 import database.dao.TeacherNotFoundException;
 import implementation.TeacherDAOImplementation;
@@ -77,7 +78,12 @@ final class DeleteMenu extends AbstractMenu {
                 case 3:
                     System.out.println(COURSE);
                     targetID = feedMe.getInt("Enter COURSE id to delete: ");
+                    
+                    try {
                     courseDAO.deleteCourse(targetID);
+                    } catch (CourseNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     System.out.println("Deleting COURSE " + targetID);
                     feedMe.getText("Press enter to continue");
                     break;
