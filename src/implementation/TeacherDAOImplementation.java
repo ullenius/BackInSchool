@@ -57,9 +57,10 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         List<Course> results = ariel.getResultList();
         
         Teacher teacher = em.find(Teacher.class, id);
-        if (teacher == null)
+        if (teacher == null) {
+            em.getTransaction().rollback(); // perform rollback
             throw new TeacherNotFoundException("Teacher is not found");
-
+        }
         for (Course course : results) {
             course.setSupervisor(null);
             em.merge(course);
