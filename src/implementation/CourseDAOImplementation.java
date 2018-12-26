@@ -46,7 +46,7 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
      * TODO: Fix the cleanup using JPQL-queries
      * 
      * @param id
-     * @throws CourseNotFoundException 
+     * @throws CourseNotFoundException (and performs rollback)
      */
     @Override
     public void deleteCourse(final int id) throws CourseNotFoundException {
@@ -59,27 +59,31 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         cleanUpEducationCourseLinkedTable.executeUpdate();
         
         Course course = em.find(Course.class, id);
-        if (course == null)
+        if (course == null) {
+            em.getTransaction().rollback();
             throw new CourseNotFoundException("Course was not found");
+        }
         em.remove(course);
         em.getTransaction().commit();
     }
     
-    
     /**
      * 
-     * We don't need to persist. JPA performs dirty checking at commit
-     * and automatically updates the course if the name has changed.
+     * We don't need to persist. JPA performs dirty checking at the commit stage
+     * and automatically updates the course if the object (name) has changed.
      * 
      * @param newName
      * @param id 
+     * @throws CourseNotFoundException (and performs rollback)
      */
     @Override
     public void updateCourseName(String newName, int id) throws CourseNotFoundException {
         em.getTransaction().begin();
         Course course = em.find(Course.class,id);
-        if (course == null)
+        if (course == null) {
+            em.getTransaction().rollback();
             throw new CourseNotFoundException("Course was not found");
+        }
         course.setName(newName.trim()); // removes whitespace
         em.getTransaction().commit();
     }
@@ -92,10 +96,11 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
      * 
      * Basic OOP and ORM code.
      * 
+     * 
      * @param courseID
      * @param supervisorID
-     * @throws CourseNotFoundException
-     * @throws TeacherNotFoundException 
+     * @throws CourseNotFoundException (and performs rollback)
+     * @throws TeacherNotFoundException (and performs rollback)
      */
     @Override
     public void updateSupervisor(final int courseID, final Integer supervisorID)
@@ -103,16 +108,20 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         
           em.getTransaction().begin();
           Course course = em.find(Course.class,courseID);
-          if (course == null)
+          if (course == null) {
+              em.getTransaction().rollback();
               throw new CourseNotFoundException("Course was not found");
+          }
          
           Teacher newSupervisor;
           if (supervisorID == null)
               newSupervisor = null;
           else {
               newSupervisor = em.find(Teacher.class,supervisorID);
-              if (newSupervisor == null)
+              if (newSupervisor == null) {
+                  em.getTransaction().rollback();
                   throw new TeacherNotFoundException("Teacher was not found");
+              }
           }
         course.setSupervisor(newSupervisor);
         em.getTransaction().commit();
