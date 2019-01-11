@@ -5,12 +5,15 @@ package implementation;
 
 import database.dao.CourseNotFoundException;
 import database.Course;
+import database.Education;
 import database.Student;
 import database.Teacher;
 import database.dao.CourseDAO;
 import database.dao.TeacherNotFoundException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import javax.persistence.Query;
 
 /**
@@ -51,18 +54,37 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
     @Override
     public void deleteCourse(final int id) throws CourseNotFoundException {
         em.getTransaction().begin();
-        // Cleans up the @ManyToMany relationship with Courses in Education
+      
         
-        Query cleanUpEducationCourseLinkedTable =
-                em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE "
-                        + "courseGroup_ID = " + id);
-        cleanUpEducationCourseLinkedTable.executeUpdate();
-        
+        // First, before we do anything. Check if the Course even exists
         Course course = em.find(Course.class, id);
         if (course == null) {
             em.getTransaction().rollback();
             throw new CourseNotFoundException("Course was not found");
         }
+        
+        
+        // Cleans up the @ManyToMany relationship with Courses in Education
+        // get all list of all Educations
+        // iterate through all group Courses
+        
+       Query myQuery = em.createQuery("SELECT e FROM Education e WHERE course MEMBER OF e.courseGroup", Education.class);
+       List<Education> educationsContainingCourse = myQuery.getResultList();
+       
+       System.out.println("size of result list = " + educationsContainingCourse.size());
+        
+        for (Education education : allEducations) {
+            // varför går det inte att använda hashset?
+            Set<Course> courseGroup = new HashSet(education.getCourseGroup());
+            for (Course c : courseGroup) {
+                if (c.getId() == id) {
+                    // matchning... 
+                    education.deleteCourse(c);
+                }
+            }
+        }
+
+        
         em.remove(course);
         em.getTransaction().commit();
     }

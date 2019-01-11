@@ -58,6 +58,10 @@ public class Education implements Persistable, Serializable {
        courseGroup.add(courseToAdd);
    }
    
+   public void deleteCourse(Course courseToDelete) {
+       courseGroup.remove(courseToDelete);
+   }
+   
    public Set<Course> getCourseGroup() {
        return Collections.unmodifiableSet(courseGroup);
    }
