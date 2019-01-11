@@ -10,6 +10,7 @@ import database.Student;
 import database.Teacher;
 import database.dao.CourseDAO;
 import database.dao.TeacherNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,8 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
     
     /**
      * 
-     * TODO: Fix the cleanup using JPQL-queries
+     * Cleans up the @ManyToMany relationship with Courses in Education
+     * using JPQL before deleting the Course.
      * 
      * @param id
      * @throws CourseNotFoundException (and performs rollback)
@@ -63,28 +65,13 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
             throw new CourseNotFoundException("Course was not found");
         }
         
-        
-        // Cleans up the @ManyToMany relationship with Courses in Education
-        // get all list of all Educations
-        // iterate through all group Courses
-        
-       Query myQuery = em.createQuery("SELECT e FROM Education e WHERE course MEMBER OF e.courseGroup", Education.class);
+       Query myQuery = em.createQuery("SELECT e FROM Education e WHERE :value MEMBER OF e.courseGroup", Education.class);
+       myQuery.setParameter("value", course);
        List<Education> educationsContainingCourse = myQuery.getResultList();
        
-       System.out.println("size of result list = " + educationsContainingCourse.size());
-        
-        for (Education education : allEducations) {
-            // varför går det inte att använda hashset?
-            Set<Course> courseGroup = new HashSet(education.getCourseGroup());
-            for (Course c : courseGroup) {
-                if (c.getId() == id) {
-                    // matchning... 
-                    education.deleteCourse(c);
-                }
-            }
-        }
+       for (Education education : educationsContainingCourse)
+           education.deleteCourse(course);
 
-        
         em.remove(course);
         em.getTransaction().commit();
     }
