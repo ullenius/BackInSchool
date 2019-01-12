@@ -50,6 +50,10 @@ public class Education implements Persistable, Serializable {
        studentGroup.add(studentToAdd);
    }
    
+   public void deleteStudent(Student studentToDelete) {
+       studentGroup.remove(studentToDelete);
+   }
+   
    public Set<Student> getGroupOfStudents() {
        return Collections.unmodifiableSet(studentGroup);
    }
