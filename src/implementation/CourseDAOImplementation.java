@@ -10,11 +10,8 @@ import database.Student;
 import database.Teacher;
 import database.dao.CourseDAO;
 import database.dao.TeacherNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import javax.persistence.Query;
 
 /**
@@ -57,7 +54,6 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
     public void deleteCourse(final int id) throws CourseNotFoundException {
         em.getTransaction().begin();
       
-        
         // First, before we do anything. Check if the Course even exists
         Course course = em.find(Course.class, id);
         if (course == null) {
