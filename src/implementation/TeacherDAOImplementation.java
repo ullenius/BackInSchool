@@ -125,7 +125,7 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
         
         em.getTransaction().begin();
         Query myQuery = em.createQuery("UPDATE Teacher teacher SET "
-                + "teacher.name = :new where teacher.id = :id");
+                + "teacher.name = :new WHERE teacher.id = :id");
         myQuery.setParameter("id", id);
         myQuery.setParameter("new", newName);
         int result = myQuery.executeUpdate(); // for debug purposes
