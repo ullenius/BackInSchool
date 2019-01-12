@@ -42,13 +42,12 @@ final class SearchMenu extends AbstractMenu {
         while (true) {
             System.out.println("SEARCH BY ID SUBMENU");
             System.out.println("Searching for entries in the database");
-            
+
             System.out.println("1. " + STUDENT);
             System.out.println("2. " + TEACHER);
             System.out.println("3. " + COURSE);
             System.out.println("4. " + EDUCATION);
             System.out.println("5. " + EXIT);
-            
             
             userChoice = feedMe.getInt("Please make your selection:");
             switch (userChoice) {

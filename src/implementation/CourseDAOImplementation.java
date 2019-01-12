@@ -5,6 +5,7 @@ package implementation;
 
 import database.dao.CourseNotFoundException;
 import database.Course;
+import database.Education;
 import database.Student;
 import database.Teacher;
 import database.dao.CourseDAO;
@@ -41,78 +42,94 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
         persistStuff(newCourse);
     }
     
+    /**
+     * 
+     * Cleans up the @ManyToMany relationship with Courses in Education
+     * using JPQL before deleting the Course.
+     * 
+     * @param id
+     * @throws CourseNotFoundException (and performs rollback)
+     */
     @Override
-    public void deleteCourse(final int id) {
+    public void deleteCourse(final int id) throws CourseNotFoundException {
         em.getTransaction().begin();
-        // Cleans up the @ManyToMany relationship with Courses in Education
-        Query cleanUpEducationCourseLinkedTable =
-                em.createNativeQuery("DELETE FROM EDUCATION_COURSE WHERE "
-                        + "courseGroup_ID = " + id);
-        cleanUpEducationCourseLinkedTable.executeUpdate();
+      
+        // First, before we do anything. Check if the Course even exists
+        Course course = em.find(Course.class, id);
+        if (course == null) {
+            em.getTransaction().rollback();
+            throw new CourseNotFoundException("Course was not found");
+        }
+        
+       Query myQuery = em.createQuery("SELECT e FROM Education e WHERE :value MEMBER OF e.courseGroup", Education.class);
+       myQuery.setParameter("value", course);
+       List<Education> educationsContainingCourse = myQuery.getResultList();
+       
+       for (Education education : educationsContainingCourse)
+           education.deleteCourse(course);
 
-        Query myQuery =
-                em.createNativeQuery("DELETE FROM COURSE WHERE ID = " + id);
-        myQuery.executeUpdate();
+        em.remove(course);
         em.getTransaction().commit();
     }
     
+    /**
+     * 
+     * We don't need to persist. JPA performs dirty checking at the commit stage
+     * and automatically updates the course if the object (name) has changed.
+     * 
+     * @param newName
+     * @param id 
+     * @throws CourseNotFoundException (and performs rollback)
+     */
     @Override
-    public void updateCourseName(String newName, int id) {
-        
-        String sql = "UPDATE COURSE SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+    public void updateCourseName(String newName, int id) throws CourseNotFoundException {
+        em.getTransaction().begin();
+        Course course = em.find(Course.class,id);
+        if (course == null) {
+            em.getTransaction().rollback();
+            throw new CourseNotFoundException("Course was not found");
+        }
+        course.setName(newName.trim()); // removes whitespace
+        em.getTransaction().commit();
     }
     /**
      * 
      * Uses Integer so that it can be set to NULL since supervisor_ID
-     * allows NULL in the database table. By sending null it gets parsed
-     * by Java as null in the String used in the SQL-statement
-     *
-     * More precisely: UPDATE COURSE SET SUPERVISOR_ID = null
-     * which is valid SQL :)
+     * allows NULL in the database table. If the paramter is NULL then
+     * we set the Teacher object to null and sets that object as supervisor for
+     * the course ID.
      * 
-     * Throws CourseNotFoundException is course ID is invalid
-     * Throws TeacherNotFoundException is the supervisor ID is invalid
+     * Basic OOP and ORM code.
+     * 
      * 
      * @param courseID
      * @param supervisorID
-     * @throws CourseNotFoundException
-     * @throws TeacherNotFoundException 
+     * @throws CourseNotFoundException (and performs rollback)
+     * @throws TeacherNotFoundException (and performs rollback)
      */
     @Override
     public void updateSupervisor(final int courseID, final Integer supervisorID)
             throws CourseNotFoundException, TeacherNotFoundException {
-        /**
-         * First lets check if the Course ID exists.
-         * 
-         * Calls a generic method getResultList that is defined
-         * in the superclass. If it returns an empty list, then
-         * the Course does not exist. We do it this way to avoid
-         * dealing with NULL-values.
-         * 
-         * If the list is empty we throw CourseNotFoundException
-         */
-        final String courseExists = "SELECT ID,NAME,SUPERVISOR_ID "
-                + "FROM COURSE WHERE ID = " + courseID;
-        if (getResultList(Course.class,courseExists).isEmpty())
-            throw new CourseNotFoundException("The course does not exist! "
-                    + "Can't set supervisor");
-        /**
-         * Everything went well. Now lets make sure that the supervisor ID
-         * (Teacher) exists as well. Same method as above. Otherwise throws
-         * an StudentNotFoundException
-         */
-        if (supervisorID != null) {
-            final String teacherExists = "SELECT ID FROM TEACHER WHERE ID = "
-                    + supervisorID;
-            if (getResultList(Teacher.class,teacherExists).isEmpty())
-                throw new TeacherNotFoundException("The teacher does not exist!");
-        }
-        // Everything went well, lets finally do the query
-        String sql = "UPDATE COURSE SET SUPERVISOR_ID=" + supervisorID;
-        sql = sql.concat(" WHERE ID = " + courseID);
-        customQuery(sql); // executes the query
+        
+          em.getTransaction().begin();
+          Course course = em.find(Course.class,courseID);
+          if (course == null) {
+              em.getTransaction().rollback();
+              throw new CourseNotFoundException("Course was not found");
+          }
+         
+          Teacher newSupervisor;
+          if (supervisorID == null)
+              newSupervisor = null;
+          else {
+              newSupervisor = em.find(Teacher.class,supervisorID);
+              if (newSupervisor == null) {
+                  em.getTransaction().rollback();
+                  throw new TeacherNotFoundException("Teacher was not found");
+              }
+          }
+        course.setSupervisor(newSupervisor);
+        em.getTransaction().commit();
     }
     
     @Override

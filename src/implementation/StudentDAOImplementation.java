@@ -1,5 +1,6 @@
 package implementation;
 
+import database.Education;
 import database.Person;
 import database.Student;
 import database.dao.StudentDAO;
@@ -45,41 +46,44 @@ public class StudentDAOImplementation extends AbstractImplementation implements 
     
     @Override
     public void updateStudentName(final String newName, final int id) {
-        String sql = "UPDATE STUDENT SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+        
+        em.getTransaction().begin();
+       Query myQuery = em.createNativeQuery("UPDATE STUDENT SET NAME = ?newname WHERE ID = ?value");
+       myQuery.setParameter("newname", newName);
+       myQuery.setParameter("value", id);
+
+       myQuery.executeUpdate();
+       em.getTransaction().commit();
     }
     
     /**
-     *
-     * This method removes the Student from the STUDENT-table. However
-     * due to constraints it first removes ALL the rows with the matching
-     * Student-ID in the linked table.
-     *
-     * If deletion in the linked table fails it performs a rollback and
-     * @Throws StudentNotFoundException
-     *
+     * 
+     * Cleans up the @OneToMany relationship with Student in Education
+     * using JPQL before deleting the Student
+     * 
      * @param id
-     * @throws StudentNotFoundException
+     * @throws StudentNotFoundException (and performs rollback)
      */
     @Override
     public void deleteStudent(final int id) throws StudentNotFoundException {
         
         em.getTransaction().begin();
-        // deletes the students from the Educations that they are tied to
-        Query cleanUp = em.createNativeQuery("DELETE FROM EDUCATION_STUDENT "
-                + "WHERE studentGroup_ID = ?target;");
-        cleanUp.setParameter("target", id);
         
-        int rowsAffected = cleanUp.executeUpdate();  // returns # of rows affected
-        if (rowsAffected == 0) {
-            em.getTransaction().rollback(); // perform rollback
+        // First, before we do anything else, we check if the Student exists
+        Student student = em.find(Student.class,id);
+        if (student == null) {
+            em.getTransaction().rollback();
             throw new StudentNotFoundException("Deletion failed.Student: " + id
                     + " not found in database");
         }
-        Query myQuery = em.createNativeQuery("DELETE FROM STUDENT WHERE ID = ?target;");
-        myQuery.setParameter("target", id);
-        myQuery.executeUpdate();
+        Query myQuery = em.createQuery("SELECT e FROM Education e WHERE :value MEMBER OF e.studentGroup", Student.class);
+        myQuery.setParameter("value", student);
+        List<Education> educationsContainingStudent = myQuery.getResultList();
+        
+        for (Education education : educationsContainingStudent)
+            education.deleteStudent(student);
+        
+        em.remove(student); // finally, remove the student object (entry) itself
         em.getTransaction().commit();
     }
     

@@ -3,6 +3,7 @@
 */
 package implementation;
 
+import database.Course;
 import database.dao.TeacherNotFoundException;
 import database.Person;
 import database.Teacher;
@@ -35,45 +36,36 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     }
     
     /**
-     * 
-     * This method removes the Teacher with the given id
-     * But first it sets all Supervisor foreign-key references
-     * in the COURSE-table to NULL. Teacher.ID is the foreign key 
-     * supervisor_id in COURSE.
-     * 
-     * It uses native SQL to do this using only one Query
-     * 
-     * Then it proceeds to delete the entry
-     * 
-     * Total number of queries executed: 2
-     * 
-     * @Throws TeacherNotFoundException if id does not exist in database
-     * (more precicisely of the UPDATE COURSE sql-query affects 0 rows).
-     * No need to worry about the roll-back. This method handles that 
-     * automatically.
-     * 
+     *
+     * This methods deletes Teachers and does the necessary cleanup among the
+     * courses they supervise.
+     *
+     * Obtains a List<Course> of results using native-query. Then proceeds
+     * to iterate through the List in typical OOP-style (and set supervisor
+     * id to null for all the Course objects in the list).
+     *
+     * @Throws TeacherNotFoundException if no matching Teacher is found
      * @param id 
-     * @throws TeacherNotFoundException 
      */
     @Override
-    public void deleteTeacher(int id) throws TeacherNotFoundException {
+    public void deleteTeacher(final int id) throws TeacherNotFoundException {
 
         em.getTransaction().begin();
-        Query supervisorCleanup = em.createNativeQuery("UPDATE COURSE SET "
-                + "SUPERVISOR_ID = NULL WHERE SUPERVISOR_ID = ?target;");
-        supervisorCleanup.setParameter("target", id);
-
-        // returns # of rows affected
-        int rowsAffected = supervisorCleanup.executeUpdate();
-        if (rowsAffected == 0) {
+        Query ariel = em.createNativeQuery("SELECT id,name,supervisor_id FROM "
+                + "COURSE WHERE supervisor_id = ?id",Course.class);
+        ariel.setParameter("id", id);
+        List<Course> results = ariel.getResultList();
+        
+        Teacher teacher = em.find(Teacher.class, id);
+        if (teacher == null) {
             em.getTransaction().rollback(); // perform rollback
-            throw new TeacherNotFoundException("Deletion failed. Teacher: " + id
-            + " not found in database");
+            throw new TeacherNotFoundException("Teacher is not found");
         }
-        Query myQuery = em.createNativeQuery("DELETE FROM TEACHER "
-                + "WHERE ID = ?target;");
-        myQuery.setParameter("target", id);
-        myQuery.executeUpdate();
+        for (Course course : results) {
+            course.setSupervisor(null);
+            em.merge(course);
+        }
+        em.remove(teacher); // and finally, removes the Teacher
         em.getTransaction().commit();
     }
     
@@ -124,10 +116,21 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     }
     
     @Override
-    public void updateTeacherName(String newName, int id) {
+    /**
+     * 
+     * Uses JPQL in OOP-fashion. Treats Teacher as an object
+     * rather than a table in a database
+     */
+    public void updateTeacherName(final String newName, final int id) {
         
-        String sql = "UPDATE TEACHER SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+        em.getTransaction().begin();
+        Query myQuery = em.createQuery("UPDATE Teacher teacher SET "
+                + "teacher.name = :new WHERE teacher.id = :id");
+        myQuery.setParameter("id", id);
+        myQuery.setParameter("new", newName);
+        int result = myQuery.executeUpdate(); // for debug purposes
+        //System.out.println("rows affected = " + result);
+        em.getTransaction().commit();
+        
     }
 }

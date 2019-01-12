@@ -2,6 +2,7 @@ package database;
 
 import database.dao.Persistable;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,6 +50,15 @@ public class Course implements Persistable, Serializable {
     public String getName() {
         return name;
     }
+    
+    public void setName(String newName) {
+        name = newName;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
     @Override
     public String toString() {
         String tutor;
@@ -59,5 +69,23 @@ public class Course implements Persistable, Serializable {
         
         return id + " " + name + " " + tutor;
     }
+
+    @Override
+    public int hashCode() {
+        return this.name.toLowerCase().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        return this.name.equalsIgnoreCase( ((Course) obj).getName());
+    }
+    
+    
     
 }

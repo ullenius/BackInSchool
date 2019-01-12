@@ -63,10 +63,14 @@ public class EducationDAOImplementation extends AbstractImplementation implement
     
     @Override
     public void updateEducationName(final String newName, final int id) {
-        
-        String sql = "UPDATE EDUCATION SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+
+       em.getTransaction().begin();
+       Query myQuery = em.createNativeQuery("UPDATE EDUCATION SET NAME = ?newname WHERE ID = ?value");
+       myQuery.setParameter("newname", newName);
+       myQuery.setParameter("value", id);
+
+       myQuery.executeUpdate();
+       em.getTransaction().commit();
     }
     
     @Override
