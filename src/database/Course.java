@@ -2,7 +2,6 @@ package database;
 
 import database.dao.Persistable;
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,6 +40,10 @@ public class Course implements Persistable, Serializable {
     
     public void setSupervisor(Teacher newSupervisor) {
         supervisor = newSupervisor;
+    }
+    
+    public void deleteSupervisor() {
+        supervisor = null;
     }
     
     public String getSupervisorName() {
