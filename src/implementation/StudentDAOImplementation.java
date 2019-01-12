@@ -45,9 +45,14 @@ public class StudentDAOImplementation extends AbstractImplementation implements 
     
     @Override
     public void updateStudentName(final String newName, final int id) {
-        String sql = "UPDATE STUDENT SET NAME=\"";
-        sql = sql.concat(newName+"\" WHERE ID = " + id);
-        customQuery(sql);
+        
+        em.getTransaction().begin();
+       Query myQuery = em.createNativeQuery("UPDATE STUDENT SET NAME = ?newname WHERE ID = ?value");
+       myQuery.setParameter("newname", newName);
+       myQuery.setParameter("value", id);
+
+       myQuery.executeUpdate();
+       em.getTransaction().commit();
     }
     
     /**
