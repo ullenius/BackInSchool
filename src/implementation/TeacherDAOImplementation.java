@@ -37,12 +37,8 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     
     /**
      *
-     * This methods deletes Teachers and does the necessary cleanup among the
+     * This methods deletes Teachers and does the necessary cleanup amongst the
      * courses they supervise.
-     *
-     * Obtains a List<Course> of results using native-query. Then proceeds
-     * to iterate through the List in typical OOP-style (and set supervisor
-     * id to null for all the Course objects in the list).
      *
      * @Throws TeacherNotFoundException if no matching Teacher is found
      * @param id 
@@ -51,22 +47,21 @@ public class TeacherDAOImplementation extends AbstractImplementation implements 
     public void deleteTeacher(final int id) throws TeacherNotFoundException {
 
         em.getTransaction().begin();
-        Query ariel = em.createNativeQuery("SELECT id,name,supervisor_id FROM "
-                + "COURSE WHERE supervisor_id = ?id",Course.class);
-        ariel.setParameter("id", id);
-        List<Course> results = ariel.getResultList();
-        
+        // First, before we do anything. Check if the Teacher even exists
         Teacher teacher = em.find(Teacher.class, id);
         if (teacher == null) {
-            em.getTransaction().rollback(); // perform rollback
-            throw new TeacherNotFoundException("Teacher is not found");
+            em.getTransaction().rollback();
+            throw new TeacherNotFoundException("Teacher was not found");
         }
+        Query myQuery = em.createQuery("SELECT c FROM Course c WHERE c.supervisor = :value", Course.class);
+        myQuery.setParameter("value", teacher);
+        List<Course> results = myQuery.getResultList();
+        
         for (Course course : results) {
-            course.setSupervisor(null);
-            em.merge(course);
+            course.deleteSupervisor();
         }
         em.remove(teacher); // and finally, removes the Teacher
-        em.getTransaction().commit();
+        em.getTransaction().commit(); // performs dirty checking and updates everything
     }
     
     @Override
