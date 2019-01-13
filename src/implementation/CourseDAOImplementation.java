@@ -74,22 +74,19 @@ public class CourseDAOImplementation extends AbstractImplementation implements C
     
     /**
      * 
-     * We don't need to persist. JPA performs dirty checking at the commit stage
-     * and automatically updates the course if the object (name) has changed.
+     * Native SQL-query. Nothing fancy but it works
      * 
      * @param newName
      * @param id 
-     * @throws CourseNotFoundException (and performs rollback)
      */
     @Override
-    public void updateCourseName(String newName, int id) throws CourseNotFoundException {
+    public void updateCourseName(String newName, int id) {
+        
         em.getTransaction().begin();
-        Course course = em.find(Course.class,id);
-        if (course == null) {
-            em.getTransaction().rollback();
-            throw new CourseNotFoundException("Course was not found");
-        }
-        course.setName(newName.trim()); // removes whitespace
+        Query myQuery = em.createNativeQuery("UPDATE COURSE SET NAME = ?newname WHERE ID = ?value");
+        myQuery.setParameter("newname", newName);
+        myQuery.setParameter("value", id);
+        myQuery.executeUpdate();
         em.getTransaction().commit();
     }
     /**
