@@ -1,14 +1,15 @@
-# Back In School
-:school: School Management project. Java EE, JPA and MySQL/mariaDB. Contains 5 entities with bi-directional relationships
-
+# :school: Back In School
 This is a school project (duration q4 2018-jan 2019). We were instructed to make a School Management System using SQL, JPA, RDBMS (relational database management system) and Java.
-             
 
 Please note that this is unfortunately **not** a Java EE project.
                
 As it stands you are required to add external 
 dependencies manually (Java EE, EclipseLink). However, a demo Meta-inf 
 persistence file is included.
+
+## Features
+* Contains **5 entities** with bi-directional relationships
+
                   
 ## Requirements
 The School management system consists of:
